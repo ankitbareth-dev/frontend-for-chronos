@@ -1,4 +1,4 @@
-import "./globals.scss";
+import "./globals.sass";
 export const metadata = {
   title: "Chronos App",
   description: "Time Matrix & Productivity App",
