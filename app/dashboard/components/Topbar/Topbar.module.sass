@@ -1,49 +1,27 @@
-:global(:root)
-  --bg-topbar: #ffffff
-  --text-primary: #1c1c1c
-  --text-secondary: #545454
-  --logo-color: #0044ff
-  --hover-bg: rgba(0,0,0,0.04)
-
-:global([data-theme="dark"])
-  --bg-topbar: #141726
-  --text-primary: #f1f1f1
-  --text-secondary: #c6c6c6
-  --logo-color: #8fa2ff
-  --hover-bg: rgba(255, 255, 255, 0.05)
-
-
 .topbar
   width: 100%
   height: 70px
-  background: #ffffff
+  background: var(--bg-topbar)
   display: flex
   align-items: center
   justify-content: space-between
   padding: 0 2rem
   border-radius: 0 0 14px 14px
-
- 
-  box-shadow: 0 2px 10px rgba(0,0,0,0.12)
-
-
-  border-bottom: 1px solid rgba(0,0,0,0.08)
-
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08)
+  border-bottom: 1px solid var(--border-color)
   position: sticky
   top: 0
   z-index: 20
-
+  transition: background .3s ease, border-color .3s ease
 
 .left
   display: flex
   align-items: center
   gap: .6rem
 
-
 .logoIcon
   font-size: 1.9rem
   color: var(--logo-color)
-
 
 .logo
   font-size: 1.45rem
@@ -53,7 +31,23 @@
 .right
   display: flex
   align-items: center
+  gap: 1rem
 
+.themeToggle
+  width: 38px
+  height: 38px
+  border-radius: 50%
+  border: 1px solid var(--border-color)
+  display: flex
+  align-items: center
+  justify-content: center
+  cursor: pointer
+  font-size: 1.2rem
+  background: var(--bg-topbar)
+  transition: .2s ease
+
+  &:hover
+    background: var(--hover-bg)
 
 .user
   display: flex
@@ -67,21 +61,18 @@
 
   &:hover
     background: var(--hover-bg)
-    border-color: rgba(0,0,0,0.1)
-
+    border-color: var(--border-color)
 
 .name
   font-size: 0.95rem
   font-weight: 500
   font-family: var(--font-inter)
 
-
 .avatar
   width: 32px
   height: 32px
   border-radius: 50%
   object-fit: cover
-
 
 .arrow
   font-size: 1.1rem

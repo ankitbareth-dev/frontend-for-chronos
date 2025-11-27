@@ -2,9 +2,15 @@
 
 import styles from "./Topbar.module.sass";
 import { RiTimerFlashLine } from "react-icons/ri";
-import { FiChevronDown } from "react-icons/fi";
+import { FiChevronDown, FiMoon, FiSun } from "react-icons/fi";
+import { useTheme } from "next-themes";
 
 export default function Topbar() {
+  const { theme, setTheme } = useTheme();
+
+  // Avoid hydration mismatch
+  if (!theme) return null;
+
   return (
     <header className={styles.topbar}>
       <div className={styles.left}>
@@ -13,6 +19,14 @@ export default function Topbar() {
       </div>
 
       <div className={styles.right}>
+        {/* THEME SWITCH BUTTON */}
+        <button
+          className={styles.themeToggle}
+          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+        >
+          {theme === "light" ? <FiMoon /> : <FiSun />}
+        </button>
+
         <div className={styles.user}>
           <img
             src="https://i.pravatar.cc/300"

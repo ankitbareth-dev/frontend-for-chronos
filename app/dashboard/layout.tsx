@@ -1,4 +1,4 @@
-import Topbar from "../components/Topbar/Topbar";
+import Topbar from "./components/Topbar/Topbar";
 
 export default function DashboardLayout({
   children,

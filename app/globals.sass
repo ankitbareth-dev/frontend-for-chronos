@@ -1,3 +1,4 @@
+/* RESET */
 *
   margin: 0
   padding: 0
@@ -5,7 +6,36 @@
 
 html, body
   height: 100%
-  font-family: sans-serif
-  background: #d6d6d8ff
-:root 
+  background: var(--bg-main)
+  color: var(--text-primary)
+  transition: background .3s ease, color .3s ease
   font-family: var(--font-inter), sans-serif
+
+/* LIGHT THEME */
+:root
+  --font-inter: 'Inter'
+
+  /* Backgrounds */
+  --bg-main: #f2f3f7
+  --bg-topbar: #ffffff
+
+  /* Text */
+  --text-primary: #1c1c1c
+  --text-secondary: #545454
+
+  /* UI Tokens */
+  --logo-color: #0044ff
+  --hover-bg: rgba(0, 0, 0, 0.04)
+  --border-color: rgba(0, 0, 0, 0.1)
+
+/* DARK THEME */
+[data-theme="dark"]
+  --bg-main: #0f1117
+  --bg-topbar: #141726
+
+  --text-primary: #f1f1f1
+  --text-secondary: #c6c6c6
+
+  --logo-color: #8fa2ff
+  --hover-bg: rgba(255, 255, 255, 0.06)
+  --border-color: rgba(255, 255, 255, 0.12)

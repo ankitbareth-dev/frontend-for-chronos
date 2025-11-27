@@ -1,5 +1,6 @@
 import "./globals.sass";
 import { Inter } from "next/font/google";
+import { Providers } from "./providers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -9,7 +10,7 @@ const inter = Inter({
 
 export const metadata = {
   title: "Chronos",
-  description: "Time tracking dashboard",
+  description: "Time Tracking Dashboard",
 };
 
 export default function RootLayout({
@@ -18,8 +19,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body>{children}</body>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
