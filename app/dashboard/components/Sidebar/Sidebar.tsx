@@ -1,33 +1,18 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import styles from "./Sidebar.module.sass";
-
-import { LayoutDashboard, Folder, Layers, LogOut, Menu, X } from "lucide-react";
-
+import { LayoutDashboard, Folder, Layers, LogOut } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function Sidebar() {
-  const [isOpen, setIsOpen] = useState(false); // mobile drawer
-  const [isCollapsed, setIsCollapsed] = useState(false); // desktop collapse
+export default function Sidebar({ onCollapseChange }: any) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
-  const sidebarRef = useRef(null);
 
-  // Close sidebar on outside click (mobile only)
   useEffect(() => {
-    function handleClick(e: any) {
-      if (
-        isOpen &&
-        sidebarRef.current &&
-        !sidebarRef.current.contains(e.target)
-      ) {
-        setIsOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, [isOpen]);
+    onCollapseChange?.(isCollapsed);
+  }, [isCollapsed]);
 
   const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: <LayoutDashboard /> },
@@ -36,65 +21,54 @@ export default function Sidebar() {
   ];
 
   return (
-    <>
-      {/* MOBILE MENU BUTTON */}
-      <button className={styles.mobileMenuBtn} onClick={() => setIsOpen(true)}>
-        <Menu />
-      </button>
+    <aside
+      className={`${styles.sidebar} ${
+        isCollapsed ? styles.collapsed : styles.expanded
+      }`}
+    >
+      {/* BRAND */}
+      <div className={styles.brandBox}>
+        <div className={styles.brandIcon}>C</div>
+      </div>
 
-      {/* OVERLAY (mobile only) */}
-      {isOpen && <div className={styles.overlay}></div>}
+      <div className={styles.divider}></div>
 
-      {/* SIDEBAR */}
-      <aside
-        ref={sidebarRef}
-        className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : ""} ${
-          isOpen ? styles.open : ""
-        }`}
+      {/* NAV */}
+      <nav className={styles.nav}>
+        {navItems.map((item) => {
+          const active = pathname === item.href;
+          return (
+            <Link
+              key={item.name}
+              href={item.href}
+              className={`${styles.navItem} ${active ? styles.active : ""}`}
+            >
+              <span className={styles.icon}>{item.icon}</span>
+              {!isCollapsed && (
+                <span className={styles.label}>{item.name}</span>
+              )}
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className={styles.divider}></div>
+
+      {/* LOGOUT */}
+      <div className={styles.bottom}>
+        <button className={styles.logoutBtn}>
+          <LogOut />
+          {!isCollapsed && <span>Logout</span>}
+        </button>
+      </div>
+
+      {/* COLLAPSE HANDLE */}
+      <button
+        className={styles.collapseHandle}
+        onClick={() => setIsCollapsed((prev) => !prev)}
       >
-        {/* HEADER */}
-        <div className={styles.top}>
-          {!isCollapsed && <h2 className={styles.logo}>Chronos</h2>}
-
-          <button
-            className={styles.collapseBtn}
-            onClick={() => setIsCollapsed((p) => !p)}
-          >
-            {isCollapsed ? "→" : "←"}
-          </button>
-
-          <button className={styles.closeBtn} onClick={() => setIsOpen(false)}>
-            <X />
-          </button>
-        </div>
-
-        {/* NAV */}
-        <nav className={styles.nav}>
-          {navItems.map((item) => {
-            const active = pathname === item.href;
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`${styles.navItem} ${active ? styles.active : ""}`}
-              >
-                <span className={styles.icon}>{item.icon}</span>
-                {!isCollapsed && (
-                  <span className={styles.label}>{item.name}</span>
-                )}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* LOGOUT */}
-        <div className={styles.bottom}>
-          <button className={styles.logoutBtn}>
-            <LogOut />
-            {!isCollapsed && <span>Logout</span>}
-          </button>
-        </div>
-      </aside>
-    </>
+        {isCollapsed ? "›" : "‹"}
+      </button>
+    </aside>
   );
 }
