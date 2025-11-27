@@ -1,30 +1,41 @@
 "use client";
 
 import styles from "./Topbar.module.sass";
-import { RiTimerFlashLine } from "react-icons/ri";
 import { FiChevronDown, FiMoon, FiSun } from "react-icons/fi";
 import { useTheme } from "next-themes";
+import { useEffect, useRef } from "react";
+import ClockIcon from "./ClockIcon";
 
 export default function Topbar() {
   const { theme, setTheme } = useTheme();
+  const mounted = useRef(false);
 
-  // Avoid hydration mismatch
-  if (!theme) return null;
+  useEffect(() => {
+    mounted.current = true;
+  }, []);
 
   return (
     <header className={styles.topbar}>
       <div className={styles.left}>
-        <RiTimerFlashLine className={styles.logoIcon} />
+        <ClockIcon />
         <h1 className={styles.logo}>Chronos</h1>
       </div>
 
       <div className={styles.right}>
-        {/* THEME SWITCH BUTTON */}
         <button
           className={styles.themeToggle}
           onClick={() => setTheme(theme === "light" ? "dark" : "light")}
         >
-          {theme === "light" ? <FiMoon /> : <FiSun />}
+          {mounted.current ? (
+            theme === "light" ? (
+              <FiMoon />
+            ) : (
+              <FiSun />
+            )
+          ) : (
+            <FiMoon />
+          )}{" "}
+          {/* fallback icon so UI doesn't shift */}
         </button>
 
         <div className={styles.user}>

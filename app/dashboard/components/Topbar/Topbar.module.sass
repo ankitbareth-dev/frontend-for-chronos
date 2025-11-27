@@ -19,9 +19,7 @@
   align-items: center
   gap: .6rem
 
-.logoIcon
-  font-size: 1.9rem
-  color: var(--logo-color)
+
 
 .logo
   font-size: 1.45rem
@@ -77,3 +75,33 @@
 .arrow
   font-size: 1.1rem
   color: var(--text-secondary)
+.clockWrap
+  display: flex
+  align-items: center
+  justify-content: center
+  color: var(--logo-color)
+
+.hourHand, .minuteHand, .secondHand
+  stroke-linecap: round
+  transform-origin: 50px 50px
+
+.hourHand
+  animation: rotateHour 12s linear infinite
+
+.minuteHand
+  animation: rotateMinute 6s linear infinite
+
+.secondHand
+  animation: rotateSecond 1s linear infinite
+
+@keyframes rotateHour
+  to
+    transform: rotate(360deg)
+
+@keyframes rotateMinute
+  to
+    transform: rotate(360deg)
+
+@keyframes rotateSecond
+  to
+    transform: rotate(360deg)
