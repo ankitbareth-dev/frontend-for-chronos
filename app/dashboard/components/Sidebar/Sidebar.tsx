@@ -31,9 +31,9 @@ export default function Sidebar({ onCollapseChange }: any) {
         <div className={styles.brandIcon}>C</div>
       </div>
 
-      <div className={styles.divider}></div>
+      <div className={styles.divider} />
 
-      {/* NAV */}
+      {/* NAVIGATION */}
       <nav className={styles.nav}>
         {navItems.map((item) => {
           const active = pathname === item.href;
@@ -52,7 +52,7 @@ export default function Sidebar({ onCollapseChange }: any) {
         })}
       </nav>
 
-      <div className={styles.divider}></div>
+      <div className={styles.divider} />
 
       {/* LOGOUT */}
       <div className={styles.bottom}>
@@ -62,7 +62,7 @@ export default function Sidebar({ onCollapseChange }: any) {
         </button>
       </div>
 
-      {/* COLLAPSE HANDLE */}
+      {/* COLLAPSE BUTTON */}
       <button
         className={styles.collapseHandle}
         onClick={() => setIsCollapsed((prev) => !prev)}

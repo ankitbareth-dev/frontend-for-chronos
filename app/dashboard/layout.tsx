@@ -3,49 +3,31 @@
 import { useState } from "react";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Topbar from "./components/Topbar/Topbar";
-import styles from "./dashboardLayout.module.sass";
-import { Menu } from "lucide-react";
 
 export default function DashboardLayout({ children }: any) {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   return (
-    <div
-      className={`${styles.dashboardLayout} ${
-        isCollapsed ? styles.sidebarCollapsed : styles.sidebarExpanded
-      }`}
-    >
-      {/* MOBILE MENU BUTTON */}
-      <button
-        className={styles.mobileMenuBtn}
-        onClick={() => setIsMobileOpen(true)}
-      >
-        <Menu />
-      </button>
+    <>
+      {/* TOPBAR ALWAYS ON TOP */}
+      <Topbar />
 
-      {/* OVERLAY */}
-      {isMobileOpen && (
-        <div
-          className={styles.overlay}
-          onClick={() => setIsMobileOpen(false)}
-        />
-      )}
-
-      {/* SIDEBAR */}
-      <div
-        className={`${styles.sidebarWrapper} ${
-          isMobileOpen ? styles.open : ""
-        }`}
-      >
+      <div className="layoutWrapper">
+        {/* SIDEBAR BELOW TOPBAR */}
         <Sidebar onCollapseChange={setIsCollapsed} />
-      </div>
 
-      {/* MAIN AREA */}
-      <div className={styles.mainArea}>
-        <Topbar />
-        <div className={styles.contentArea}>{children}</div>
+        <main
+          className="mainArea"
+          style={{
+            marginLeft: isCollapsed ? "80px" : "250px",
+            // subtract topbar height
+            marginTop: "64px",
+            transition: "margin-left 0.3s ease",
+          }}
+        >
+          {children}
+        </main>
       </div>
-    </div>
+    </>
   );
 }
