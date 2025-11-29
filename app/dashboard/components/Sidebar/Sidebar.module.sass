@@ -6,10 +6,13 @@
   min-width: var(--sidebar-width)
   background: var(--bg-topbar)
   border-right: 1px solid var(--border-color)
-  display: flex
+  /* display: flex */
   align-items: stretch
   z-index: 30
-  transition: width .24s ease, transform .2s ease
+  overflow: hidden
+
+  // Smooth width animation
+  transition: width .32s cubic-bezier(.4, 0, .2, 1), min-width .32s cubic-bezier(.4, 0, .2, 1)
 
   &.collapsed
     width: var(--sidebar-collapsed-width)
@@ -19,76 +22,94 @@
   height: 100%
   display: flex
   flex-direction: column
-  padding: 0 clamp(.8rem, 2.2vw, 1rem) /* only horizontal padding */
-  gap: clamp(.5rem, 1.4vw, .9rem)
+  padding: 1.2rem 1.1rem
+  gap: 1.2rem
+  transition: padding .28s cubic-bezier(.4, 0, .2, 1)
+
+.sidebar.collapsed .inner
+  padding: 1.2rem .6rem
 
 .brandWrap
   display: flex
   align-items: center
-  gap: .6rem
-  padding-top: .75rem
+  gap: .7rem
+  padding-bottom: .5rem
 
 .brand
-  width: 44px
-  height: 44px
-  border-radius: 10px
+  width: 42px
+  height: 42px
+  border-radius: 12px
   display: grid
   place-items: center
   font-weight: 700
-  font-size: 1.15rem
-  color: white
+  font-size: 1.05rem
   background: var(--logo-color)
+  color: white
   flex-shrink: 0
 
 .brandLabel
   font-weight: 600
-  font-size: 1rem
+  font-size: 1.05rem
   color: var(--text-primary)
+  opacity: 1
+  transform: translateX(0)
+  transition: opacity .28s ease, transform .32s ease
+
+.sidebar.collapsed .brandLabel
+  opacity: 0
+  transform: translateX(-10px)
+  pointer-events: none
 
 .sep
   height: 1px
   background: var(--border-color)
-  margin-top: .6rem
-  margin-bottom: .6rem
-  border-radius: 1px
 
 .nav
   display: flex
   flex-direction: column
-  gap: .25rem
+  gap: .35rem
 
 .navItem
   display: flex
   align-items: center
-  gap: .8rem
-  padding: .55rem .55rem
+  gap: .9rem
+  padding: .7rem .6rem
   border-radius: 10px
   background: transparent
   border: 1px solid transparent
   cursor: pointer
-  transition: background .12s ease, border-color .12s ease
-  text-align: left
   font-weight: 500
   color: var(--text-secondary)
+  transition: background .18s ease, border-color .18s ease, padding .28s cubic-bezier(.4, 0, .2, 1)
 
-  &:hover
-    background: var(--hover-bg)
-    color: var(--text-primary)
-    border-color: var(--border-color)
+.sidebar.collapsed .navItem
+  padding: .7rem 0.4rem
 
 .icon
-  font-size: 1.05rem
+  font-size: 1.1rem
   flex-shrink: 0
-  color: var(--text-secondary)
+  transition: transform .32s ease, opacity .28s ease
+
+.sidebar.collapsed .icon
+  transform: translateX(3px)
 
 .label
   font-size: .95rem
   color: var(--text-primary)
+  white-space: nowrap
+  opacity: 1
+  transform: translateX(0)
+  transition: opacity .28s ease, transform .32s ease
+
+.sidebar.collapsed .label
+  opacity: 0
+  transform: translateX(-12px)
+  pointer-events: none
 
 .active
-  background: linear-gradient(180deg, rgba(0,0,0,0.02), transparent)
-  color: var(--text-primary)
+  background: rgba(255,255,255,0.05)
   border-color: var(--border-color)
+  color: var(--text-primary)
 
 .flexGrow
   flex: 1 1 auto
@@ -96,25 +117,23 @@
 .logout
   display: flex
   align-items: center
-  gap: .7rem
-  padding: .55rem .55rem
+  gap: .9rem
+  padding: .7rem .6rem
   border-radius: 10px
-  background: transparent
-  border: 1px solid transparent
-  cursor: pointer
   font-weight: 500
   color: var(--text-secondary)
+  cursor: pointer
+  border: 1px solid transparent
+  transition: background .18s ease, border-color .18s ease, padding .28s cubic-bezier(.4, 0, .2, 1)
 
-  &:hover
-    background: var(--hover-bg)
-    color: var(--text-primary)
-    border-color: var(--border-color)
+.sidebar.collapsed .logout
+  padding: .7rem 0.4rem
 
 .collapseToggle
   position: absolute
-  right: -14px
   top: 50%
-  transform: translateY(-50%)
+  right: 0
+  transform: translate(50%, -50%) // keeps it centered
   width: 28px
   height: 48px
   border-radius: 12px
@@ -124,22 +143,11 @@
   place-items: center
   cursor: pointer
   box-shadow: 0 6px 18px rgba(0,0,0,0.14)
-  transition: transform .15s ease, background .12s ease
   z-index: 40
+  transition: transform .32s cubic-bezier(.4, 0, .2, 1), background .18s ease
 
   &:hover
-    transform: translateY(-50%) scale(1.02)
+    transform: translate(50%, -50%) scale(1.05)
 
-@media (max-width: 900px)
-  .sidebar
-    position: fixed
-    left: 0
-    top: var(--topbar-height)
-    transform: translateX(0)
-    height: calc(100vh - var(--topbar-height))
-    z-index: 60
-
-@media (max-width: 640px)
-  .sidebar
-    width: calc(100% * 0.72)
-    min-width: 220px
+.sidebar.collapsed .collapseToggle
+  transform: translate(50%, -50%) // stays perfectly aligned
