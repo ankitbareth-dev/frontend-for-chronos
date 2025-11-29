@@ -83,7 +83,7 @@
   transition: background .18s ease, border-color .18s ease, padding .28s cubic-bezier(.4, 0, .2, 1)
 
 .sidebar.collapsed .navItem
-  padding: .7rem 0.4rem
+  padding: .7rem .7rem
 
 .icon
   font-size: 1.1rem
@@ -118,22 +118,30 @@
   display: flex
   align-items: center
   gap: .9rem
-  padding: .7rem .6rem
+  padding: .7rem .6rem   
   border-radius: 10px
   font-weight: 500
   color: var(--text-secondary)
   cursor: pointer
   border: 1px solid transparent
+  background: transparent
   transition: background .18s ease, border-color .18s ease, padding .28s cubic-bezier(.4, 0, .2, 1)
 
+
+.logout:hover
+  background: var(--hover-bg)
+  border-color: var(--border-color)
+  color: var(--text-primary)
+
+
 .sidebar.collapsed .logout
-  padding: .7rem 0.4rem
+  padding: .7rem .7rem
 
 .collapseToggle
   position: absolute
   top: 50%
-  right: 0
-  transform: translate(50%, -50%) // keeps it centered
+  right: 4
+  transform: translate(50%, -50%) 
   width: 28px
   height: 48px
   border-radius: 12px
@@ -150,4 +158,4 @@
     transform: translate(50%, -50%) scale(1.05)
 
 .sidebar.collapsed .collapseToggle
-  transform: translate(50%, -50%) // stays perfectly aligned
+  transform: translate(50%, -50%) 
