@@ -1,0 +1,146 @@
+.sidebar
+  position: sticky
+  top: var(--topbar-height)
+  height: calc(100vh - var(--topbar-height))
+  width: var(--sidebar-width)
+  min-width: var(--sidebar-width)
+  background: var(--bg-topbar)
+  border-right: 1px solid var(--border-color)
+  display: flex
+  align-items: stretch
+  z-index: 30
+  transition: width .24s ease, transform .2s ease
+
+  &.collapsed
+    width: var(--sidebar-collapsed-width)
+    min-width: var(--sidebar-collapsed-width)
+
+.inner
+  /* crucial: full height to touch bottom */
+  height: 100%
+  display: flex
+  flex-direction: column
+  padding: 0 clamp(.8rem, 2.2vw, 1rem) /* only horizontal padding */
+  gap: clamp(.5rem, 1.4vw, .9rem)
+
+.brandWrap
+  display: flex
+  align-items: center
+  gap: .6rem
+  padding-top: .75rem
+
+.brand
+  width: 44px
+  height: 44px
+  border-radius: 10px
+  display: grid
+  place-items: center
+  font-weight: 700
+  font-size: 1.15rem
+  color: white
+  background: var(--logo-color)
+  flex-shrink: 0
+
+.brandLabel
+  font-weight: 600
+  font-size: 1rem
+  color: var(--text-primary)
+
+.sep
+  height: 1px
+  background: var(--border-color)
+  margin-top: .6rem
+  margin-bottom: .6rem
+  border-radius: 1px
+
+.nav
+  display: flex
+  flex-direction: column
+  gap: .25rem
+
+.navItem
+  display: flex
+  align-items: center
+  gap: .8rem
+  padding: .55rem .55rem
+  border-radius: 10px
+  background: transparent
+  border: 1px solid transparent
+  cursor: pointer
+  transition: background .12s ease, border-color .12s ease
+  text-align: left
+  font-weight: 500
+  color: var(--text-secondary)
+
+  &:hover
+    background: var(--hover-bg)
+    color: var(--text-primary)
+    border-color: var(--border-color)
+
+.icon
+  font-size: 1.05rem
+  flex-shrink: 0
+  color: var(--text-secondary)
+
+.label
+  font-size: .95rem
+  color: var(--text-primary)
+
+.active
+  background: linear-gradient(180deg, rgba(0,0,0,0.02), transparent)
+  color: var(--text-primary)
+  border-color: var(--border-color)
+
+.flexGrow
+  flex: 1 1 auto
+
+.logout
+  display: flex
+  align-items: center
+  gap: .7rem
+  padding: .55rem .55rem
+  border-radius: 10px
+  background: transparent
+  border: 1px solid transparent
+  cursor: pointer
+  font-weight: 500
+  color: var(--text-secondary)
+
+  &:hover
+    background: var(--hover-bg)
+    color: var(--text-primary)
+    border-color: var(--border-color)
+
+.collapseToggle
+  position: absolute
+  right: -14px
+  top: 50%
+  transform: translateY(-50%)
+  width: 28px
+  height: 48px
+  border-radius: 12px
+  border: 1px solid var(--border-color)
+  background: var(--bg-topbar)
+  display: grid
+  place-items: center
+  cursor: pointer
+  box-shadow: 0 6px 18px rgba(0,0,0,0.14)
+  transition: transform .15s ease, background .12s ease
+  z-index: 40
+
+  &:hover
+    transform: translateY(-50%) scale(1.02)
+
+@media (max-width: 900px)
+  .sidebar
+    position: fixed
+    left: 0
+    top: var(--topbar-height)
+    transform: translateX(0)
+    height: calc(100vh - var(--topbar-height))
+    z-index: 60
+
+@media (max-width: 640px)
+  .sidebar
+    width: calc(100% * 0.72)
+    min-width: 220px

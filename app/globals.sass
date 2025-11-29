@@ -1,3 +1,5 @@
+/* globals.sass */
+
 /* RESET */
 *
   margin: 0
@@ -6,17 +8,23 @@
 
 html, body
   height: 100%
+  width: 100%
   background: var(--bg-main)
   color: var(--text-primary)
   transition: background .3s ease, color .3s ease
   font-family: var(--font-inter), sans-serif
 
-
-/* LIGHT THEME */
 :root
   --font-inter: 'Inter'
 
-  /* Backgrounds */
+  /* Topbar height (global) */
+  --topbar-height: clamp(60px, 6vw, 70px)
+
+  /* Sidebar */
+  --sidebar-width: 260px
+  --sidebar-collapsed-width: 76px
+
+  /* LIGHT THEME */
   --bg-main: #f2f3f7
   --bg-topbar: #ffffff
 
@@ -40,6 +48,3 @@ html, body
   --logo-color: #8fa2ff
   --hover-bg: rgba(255, 255, 255, 0.06)
   --border-color: rgba(255, 255, 255, 0.12)
-
-
-
