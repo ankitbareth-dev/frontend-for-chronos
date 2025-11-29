@@ -13,9 +13,9 @@ import {
 import styles from "./Sidebar.module.sass";
 
 const NAV = [
-  { label: "Dashboard", href: "/dashboard", Icon: FiGrid },
-  { label: "Matrices", href: "/matrices", Icon: FiLayers },
-  { label: "Categories", href: "/categories", Icon: FiList },
+  { label: "Dashboard", href: "/dashboard/", Icon: FiGrid },
+  { label: "Matrices", href: "/dashboard/matrices", Icon: FiLayers },
+  { label: "Categories", href: "/dashboard/categories", Icon: FiList },
 ];
 
 export default function Sidebar() {
@@ -71,7 +71,6 @@ export default function Sidebar() {
         <button
           className={styles.logout}
           onClick={() => {
-            // placeholder: integrate with your auth
             router.push("/");
           }}
         >

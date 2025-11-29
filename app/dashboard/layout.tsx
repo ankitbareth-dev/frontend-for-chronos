@@ -1,9 +1,8 @@
-// app/dashboard/layout.tsx
-"use client"; // make sure child components that use hooks can run client-side where needed
+"use client";
 
-import Topbar from "./components/Topbar/Topbar"; // match your file casing/path
+import Topbar from "./components/Topbar/Topbar";
 import Sidebar from "./components/Sidebar/Sidebar";
-import "../globals.sass"; // ensure global variables available (if not imported elsewhere)
+import "../globals.sass";
 
 export default function DashboardLayout({
   children,
