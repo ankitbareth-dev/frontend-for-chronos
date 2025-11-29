@@ -41,8 +41,8 @@ export default function Sidebar() {
     >
       <div className={styles.inner}>
         <div className={styles.brandWrap}>
-          <div className={styles.brand}>C</div>
-          {!collapsed && <div className={styles.brandLabel}>Chronos</div>}
+          <div className={styles.brand}>H</div>
+          {!collapsed && <div className={styles.brandLabel}>Himanshu</div>}
         </div>
 
         <div className={styles.sep} />
