@@ -9,6 +9,7 @@ import {
   FiLogOut,
   FiChevronLeft,
   FiChevronRight,
+  FiUser,
 } from "react-icons/fi";
 import styles from "./Sidebar.module.sass";
 
@@ -16,6 +17,7 @@ const NAV = [
   { label: "Dashboard", href: "/dashboard", Icon: FiGrid },
   { label: "Matrices", href: "/dashboard/matrices", Icon: FiLayers },
   { label: "Categories", href: "/dashboard/categories", Icon: FiList },
+  { label: "Profile", href: "/dashboard/profile", Icon: FiUser },
 ];
 
 export default function Sidebar() {
