@@ -1,14 +1,16 @@
 "use client";
 
 import styles from "./Topbar.module.sass";
-import { FiMoon, FiSun } from "react-icons/fi";
+import { FiMoon, FiSun, FiMenu } from "react-icons/fi";
 import { useTheme } from "next-themes";
 import { useEffect, useRef } from "react";
+import { useMediaQuery } from "../../../hooks/useMediaQuery";
 import ClockIcon from "./ClockIcon";
 
-export default function Topbar() {
+export default function Topbar({ onOpenMobileMenu }: any) {
   const { theme, setTheme } = useTheme();
   const mounted = useRef(false);
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
     mounted.current = true;
@@ -16,6 +18,18 @@ export default function Topbar() {
 
   return (
     <header className={styles.topbar}>
+      {/* MOBILE HAMBURGER — only visible on small screens */}
+      {isMobile && (
+        <button
+          className={styles.hamburger}
+          onClick={onOpenMobileMenu}
+          aria-label="Open Menu"
+        >
+          <FiMenu />
+        </button>
+      )}
+
+      {/* CENTERED CLOCK + LOGO (mobile) / LEFT (desktop) */}
       <div className={styles.left}>
         <ClockIcon />
         <h1 className={styles.logo}>Chronos</h1>

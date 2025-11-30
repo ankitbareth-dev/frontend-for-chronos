@@ -40,14 +40,10 @@
   font-size: clamp(1rem, 2.4vw, 1.2rem)
   background: var(--bg-topbar)
   transition: .2s ease
+  color: var(--text-secondary)
 
   &:hover
     background: var(--hover-bg)
-
-
-  font-size: clamp(.9rem, 2vw, 1.1rem)
-  color: var(--text-secondary)
-
 
 .clockWrap
   display: flex
@@ -55,8 +51,6 @@
   justify-content: center
   color: var(--logo-color)
   transform: scale(clamp(0.8, 1, 1.2))
-
-
 
 .hourHand, .minuteHand, .secondHand
   stroke-linecap: round
@@ -84,26 +78,33 @@
     transform: rotate(360deg)
 
 
-@media (max-width: 600px)
-  .user
-    padding: 0
-    border: none
-    background: transparent !important
-    gap: 0
 
-    &:hover
-      background: none
-      border: none
+.hamburger
+  display: none
+  background: var(--bg-topbar)
+  border: 1px solid var(--border-color)
+  width: 36px
+  height: 36px
+  border-radius: 10px
+  align-items: center
+  justify-content: center
+  cursor: pointer
+  font-size: 1.2rem
+  color: var(--text-primary)
+  transition: .2s ease
 
-  .name, .arrow
-    display: none    
-  .avatar
-    width: 36px
-    height: 36px
-    border-radius: 50%
-@media (max-width: 600px)
+  &:hover
+    background: var(--hover-bg)
+
+
+
+@media (max-width: 768px)
+  .hamburger
+    display: flex
+    z-index: 50
+
   .topbar
-    justify-content: center
+    justify-content: space-between
     position: relative
 
   .left
@@ -118,3 +119,4 @@
   .right
     position: absolute
     right: 10px
+  

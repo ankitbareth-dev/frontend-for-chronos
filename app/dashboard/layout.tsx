@@ -2,6 +2,9 @@
 
 import Topbar from "./components/Topbar/Topbar";
 import Sidebar from "./components/Sidebar/Sidebar";
+import MobileMenu from "./components/MobileMenu/MobileMenu";
+import { useMediaQuery } from "../hooks/useMediaQuery";
+import { useState } from "react";
 import "../globals.sass";
 
 export default function DashboardLayout({
@@ -9,12 +12,17 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const [openMenu, setOpenMenu] = useState(false);
+
+  if (isMobile === null) return null;
+
   return (
     <div
       className="appRoot"
       style={{ minHeight: "100vh", background: "var(--bg-main)" }}
     >
-      <Topbar />
+      <Topbar onOpenMobileMenu={() => setOpenMenu(true)} />
 
       <div
         style={{
@@ -24,7 +32,11 @@ export default function DashboardLayout({
           overflow: "hidden",
         }}
       >
-        <Sidebar />
+        {isMobile ? (
+          <MobileMenu open={openMenu} onClose={() => setOpenMenu(false)} />
+        ) : (
+          <Sidebar />
+        )}
 
         <main
           style={{
@@ -32,7 +44,6 @@ export default function DashboardLayout({
             height: "100%",
             overflow: "auto",
             padding: "1.25rem",
-            WebkitOverflowScrolling: "touch",
           }}
         >
           {children}
