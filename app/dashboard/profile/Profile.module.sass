@@ -2,8 +2,9 @@
   width: 100%
   display: flex
   justify-content: center
-  padding-block: clamp(30px, 5vw, 60px)
+  padding-block: clamp(30px, 4vw, 60px)
   background: var(--bg-topbar)
+  min-height: 100vh
 
 .wrapper
   width: min(1200px, 92%)
@@ -11,19 +12,26 @@
   grid-template-columns: 300px 1fr
   gap: clamp(20px, 3vw, 40px)
 
+  @media (max-width: 992px)
+    grid-template-columns: 1fr
+    gap: 20px
+
 .sidebar
-  background: var(--bg-topbar)
-  padding: clamp(20px, 3vw, 30px)
-  border-radius: 16px
+  background: var(--bg-main)
+  padding: 28px
+  border-radius: 18px
   border: 1px solid var(--border-color)
   height: fit-content
-  box-shadow: 0 4px 20px rgba(0,0,0,0.06)
+  box-shadow: 0 4px 22px rgba(0, 0, 0, 0.08)
+  display: flex
+  justify-content: center
 
 .avatarSection
-  text-align: center
   display: flex
   flex-direction: column
-  gap: 14px
+  text-align: center
+  gap: 16px
+  width: 100%
 
 .avatar
   width: 110px
@@ -37,71 +45,120 @@
   font-weight: 600
   color: #fff
   margin: 0 auto
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18)
 
 .username
   font-size: 1.3rem
   font-weight: 600
   color: var(--text-primary)
+  margin: 0
 
 .userEmail
   font-size: 0.95rem
   color: var(--text-secondary)
+  margin: 0
+
+.secondaryBtn
+  margin-top: 10px
+  padding: 10px 14px
+  border-radius: 10px
+  background: rgba(255, 255, 255, 0.04)
+  border: 1px solid var(--border-color)
+  cursor: pointer
+  color: var(--text-primary)
+  font-size: 0.88rem
+  display: flex
+  align-items: center
+  justify-content: center
+  gap: 6px
+  transition: all 0.25s ease
+
+  &:hover
+    background: rgba(255, 255, 255, 0.08)
 
 .infoList
-  margin-top: 16px
+  margin-top: 18px
   display: grid
-  gap: 14px
+  gap: 16px
 
   div
     text-align: left
+    padding: 12px
+    background: var(--bg-topbar)
+    border-radius: 10px
+    border: 1px solid var(--border-color)
 
     span
-      font-size: 0.8rem
+      font-size: 0.78rem
       color: var(--text-secondary)
+      display: block
 
     p
       font-size: 0.95rem
       margin-top: 4px
       color: var(--text-primary)
+      font-weight: 500
+      margin: 4px 0 0 0
 
 .content
   display: flex
   flex-direction: column
   gap: clamp(24px, 3vw, 40px)
 
-
-
 .section
-  background: var(--bg-topbar)
-  padding: clamp(20px, 3vw, 32px)
-  border-radius: 16px
+  background: var(--bg-main)
+  padding: clamp(22px, 3vw, 32px)
+  border-radius: 18px
   border: 1px solid var(--border-color)
-  box-shadow: 0 3px 16px rgba(0,0,0,0.06)
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08)
   display: flex
   flex-direction: column
-  gap: 12px
+  gap: 18px
+
+.sectionHeader
+  display: flex
+  align-items: center
+  gap: 10px
+  margin-bottom: 4px
 
   h2
-    font-size: clamp(1.1rem, 3vw, 1.4rem)
+    font-size: 1.4rem
     font-weight: 600
-    margin-bottom: 8px
     color: var(--text-primary)
+    margin: 0
+
+.icon
+  color: var(--logo-color)
+  font-size: 20px
+
+.field
+  display: flex
+  flex-direction: column
+  gap: 6px
 
 .label
   font-size: 0.9rem
   color: var(--text-secondary)
+  margin-bottom: 2px
 
 .input
+  width: 100%
   padding: 12px
   border-radius: 10px
   border: 1px solid var(--border-color)
-  background: var(--bg-main)
+  background: var(--bg-topbar)
   color: var(--text-primary)
-  transition: border .2s ease
+  font-size: 0.95rem
+  transition: border 0.2s ease
+  box-sizing: border-box
 
   &:focus
     border-color: var(--logo-color)
     outline: none
+
+  &::placeholder
+    color: var(--text-secondary)
+    opacity: 0.6
 
 .primaryBtn
   margin-top: 10px
@@ -113,19 +170,9 @@
   color: #fff
   cursor: pointer
   font-size: 0.95rem
-  transition: all .2s ease
+  font-weight: 500
+  transition: all 0.25s ease
 
   &:hover
-    opacity: .9
-
-.secondaryBtn
-  padding: 6px 14px
-  border-radius: 8px
-  background: transparent
-  border: 1px solid var(--border-color)
-  cursor: pointer
-  font-size: 0.9rem
-  color: var(--text-primary)
-
-  &:hover
-    background: rgba(255,255,255,0.06)
+    transform: translateY(-2px)
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22)

@@ -1,6 +1,7 @@
 "use client";
 
 import { ChangeEvent, useState } from "react";
+import { FiCamera, FiMail, FiUser, FiShield } from "react-icons/fi";
 import styles from "./Profile.module.sass";
 
 const Profile = () => {
@@ -16,7 +17,7 @@ const Profile = () => {
   return (
     <div className={styles.page}>
       <div className={styles.wrapper}>
-        {/* Left panel */}
+        {/* Sidebar */}
         <aside className={styles.sidebar}>
           <div className={styles.avatarSection}>
             <div className={styles.avatar}>{name.charAt(0)}</div>
@@ -24,7 +25,10 @@ const Profile = () => {
             <h3 className={styles.username}>{name}</h3>
             <p className={styles.userEmail}>{email}</p>
 
-            <button className={styles.secondaryBtn}>Change Photo</button>
+            <button className={styles.secondaryBtn}>
+              <FiCamera size={16} />
+              Change Photo
+            </button>
 
             <div className={styles.infoList}>
               <div>
@@ -39,53 +43,67 @@ const Profile = () => {
           </div>
         </aside>
 
-        {/* Right Panel */}
+        {/* Main Content */}
         <main className={styles.content}>
-          {/* Profile Info */}
+          {/* Profile Information */}
           <div className={styles.section}>
-            <h2>Profile Information</h2>
+            <div className={styles.sectionHeader}>
+              <FiUser className={styles.icon} size={20} />
+              <h2>Profile Information</h2>
+            </div>
 
-            <label className={styles.label}>Name</label>
-            <input
-              className={styles.input}
-              type="text"
-              value={name}
-              onChange={handle(setName)}
-              placeholder="Enter your name"
-            />
+            <div className={styles.field}>
+              <label className={styles.label}>Name</label>
+              <input
+                className={styles.input}
+                type="text"
+                value={name}
+                onChange={handle(setName)}
+                placeholder="Enter your name"
+              />
+            </div>
 
-            <label className={styles.label}>Email</label>
-            <input
-              className={styles.input}
-              type="email"
-              value={email}
-              onChange={handle(setEmail)}
-              placeholder="Enter email"
-            />
+            <div className={styles.field}>
+              <label className={styles.label}>Email</label>
+              <input
+                className={styles.input}
+                type="email"
+                value={email}
+                onChange={handle(setEmail)}
+                placeholder="Enter email"
+              />
+            </div>
 
             <button className={styles.primaryBtn}>Save Changes</button>
           </div>
 
-          {/* Security */}
+          {/* Security Section */}
           <div className={styles.section}>
-            <h2>Security</h2>
+            <div className={styles.sectionHeader}>
+              <FiShield className={styles.icon} size={20} />
+              <h2>Security</h2>
+            </div>
 
-            <label className={styles.label}>Old Password</label>
-            <input
-              className={styles.input}
-              type="password"
-              value={oldPass}
-              onChange={handle(setOldPass)}
-            />
+            <div className={styles.field}>
+              <label className={styles.label}>Old Password</label>
+              <input
+                className={styles.input}
+                type="password"
+                value={oldPass}
+                onChange={handle(setOldPass)}
+              />
+            </div>
 
-            <label className={styles.label}>New Password</label>
-            <input
-              className={styles.input}
-              type="password"
-              value={newPass}
-              onChange={handle(setNewPass)}
-              placeholder="Enter new password"
-            />
+            <div className={styles.field}>
+              <label className={styles.label}>New Password</label>
+              <input
+                className={styles.input}
+                type="password"
+                value={newPass}
+                onChange={handle(setNewPass)}
+                placeholder="Enter new password"
+              />
+            </div>
 
             <button className={styles.primaryBtn}>Update Password</button>
           </div>
