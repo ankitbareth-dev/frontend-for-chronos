@@ -43,7 +43,6 @@ export default function DashboardLayout({
             flex: 1,
             height: "100%",
             overflow: "auto",
-            padding: "1.25rem",
           }}
         >
           {children}
