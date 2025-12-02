@@ -23,6 +23,18 @@ html, body
   --logo-color: #0044ff
   --hover-bg: rgba(0, 0, 0, 0.04)
   --border-color: rgba(0, 0, 0, 0.1)
+  &::-webkit-scrollbar
+    width: 8px
+
+  &::-webkit-scrollbar-track
+    background: var(--bg-topbar)
+
+  &::-webkit-scrollbar-thumb
+    background: rgba(0, 0, 0, 0.1)
+    border-radius: 4px
+
+    &:hover
+      background: rgba(0, 0, 0, 0.15)
 
 
 [data-theme="dark"]
@@ -35,3 +47,16 @@ html, body
   --logo-color: #8fa2ff
   --hover-bg: rgba(255, 255, 255, 0.06)
   --border-color: rgba(255, 255, 255, 0.12)
+
+  &::-webkit-scrollbar
+    width: 8px
+
+  &::-webkit-scrollbar-track
+    background: var(--bg-topbar)
+
+  &::-webkit-scrollbar-thumb
+    background: rgba(255, 255, 255, 0.1)
+    border-radius: 4px
+
+    &:hover
+      background: rgba(255, 255, 255, 0.15)
