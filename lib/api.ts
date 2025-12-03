@@ -1,11 +1,11 @@
-export const API_BASE = "http://localhost:3000";
+export const API_BASE = "http://localhost:5000";
 
 export async function signup(data: {
   name: string;
   email: string;
   password: string;
 }) {
-  const res = await fetch(`${API_BASE}/signup`, {
+  const res = await fetch(`${API_BASE}/api/auth/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -23,13 +23,12 @@ export async function signup(data: {
 }
 
 export async function login(data: { email: string; password: string }) {
-  const res = await fetch(`${API_BASE}/login`, {
+  const res = await fetch(`${API_BASE}/api/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
-    credentials: "include",
   });
 
   if (!res.ok) {
@@ -41,7 +40,7 @@ export async function login(data: { email: string; password: string }) {
 }
 
 export async function logout() {
-  const res = await fetch(`${API_BASE}/logout`, {
+  const res = await fetch(`${API_BASE}/api/auth/logout`, {
     method: "POST",
     credentials: "include",
   });
@@ -55,7 +54,7 @@ export async function logout() {
 }
 
 export async function authCheck() {
-  const res = await fetch(`${API_BASE}/auth-check`, {
+  const res = await fetch(`${API_BASE}/api/auth/check-auth`, {
     method: "GET",
     credentials: "include",
   });

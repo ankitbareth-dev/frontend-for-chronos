@@ -2,36 +2,83 @@
 
 import { useState } from "react";
 import styles from "./Auth.module.sass";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { login, signup } from "@/store/slices/authSlice";
 
 export default function AuthPage() {
   const [mode, setMode] = useState<"login" | "signup">("login");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading, error } = useSelector((state: RootState) => state.auth);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (mode === "login") {
+      dispatch(login({ email, password }));
+    } else {
+      dispatch(signup({ name, email, password }));
+      // optional: switch to login after signup success
+      setMode("login");
+    }
+  };
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.card}>
         <h2>{mode === "login" ? "Login" : "Sign Up"}</h2>
 
-        <form onSubmit={(e) => e.preventDefault()} className={styles.form}>
+        <form onSubmit={handleSubmit} className={styles.form}>
           {mode === "signup" && (
             <div className={styles.inputGroup}>
               <label>Name</label>
-              <input type="text" placeholder="Enter your name" required />
+              <input
+                type="text"
+                placeholder="Enter your name"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
             </div>
           )}
 
           <div className={styles.inputGroup}>
             <label>Email</label>
-            <input type="email" placeholder="Enter your email" required />
+            <input
+              type="text"
+              placeholder="Enter your email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
 
           <div className={styles.inputGroup}>
             <label>Password</label>
-            <input type="password" placeholder="Enter your password" required />
+            <input
+              type="password"
+              placeholder="Enter your password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
 
-          <button className={styles.actionBtn}>
-            {mode === "login" ? "Login" : "Sign Up"}
+          <button className={styles.actionBtn} disabled={loading}>
+            {loading
+              ? mode === "login"
+                ? "Logging in..."
+                : "Signing up..."
+              : mode === "login"
+              ? "Login"
+              : "Sign Up"}
           </button>
+
+          {error && <p style={{ color: "red", marginTop: "8px" }}>{error}</p>}
         </form>
 
         <p className={styles.switchText}>
