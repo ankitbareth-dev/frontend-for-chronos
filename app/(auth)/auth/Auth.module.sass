@@ -1,0 +1,71 @@
+.wrapper
+  min-height: 100vh
+  display: flex
+  justify-content: center
+  align-items: center
+  background: var(--bg-main)
+  padding: 20px
+
+.card
+  width: 100%
+  max-width: 420px
+  background: var(--bg-topbar)
+  padding: 32px
+  border-radius: 16px
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08)
+  border: 1px solid var(--border-color)
+
+  h2
+    margin-bottom: 24px
+    color: var(--text-primary)
+
+.form
+  display: flex
+  flex-direction: column
+  gap: 16px
+
+.inputGroup
+  display: flex
+  flex-direction: column
+  gap: 6px
+
+  label
+    font-size: 14px
+    color: var(--text-secondary)
+
+  input
+    padding: 12px
+    border-radius: 8px
+    border: 1px solid var(--border-color)
+    background: var(--bg-main)
+    color: var(--text-primary)
+    outline: none
+    transition: border .2s
+
+    &:focus
+      border-color: var(--logo-color)
+
+.actionBtn
+  padding: 12px
+  border-radius: 8px
+  background: var(--logo-color)
+  color: #fff
+  border: none
+  cursor: pointer
+  font-weight: 600
+  margin-top: 4px
+  transition: opacity .2s
+
+  &:hover
+    opacity: .9
+
+.switchText
+  margin-top: 16px
+  font-size: 14px
+  color: var(--text-secondary)
+  text-align: center
+
+  span
+    color: var(--logo-color)
+    cursor: pointer
+    font-weight: 600
