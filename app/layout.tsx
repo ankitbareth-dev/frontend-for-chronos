@@ -9,7 +9,10 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Chronos",
+  title: {
+    default: "Chronos",
+    template: "%s | Chronos",
+  },
   description: "Time Tracking Dashboard",
 };
 
@@ -19,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html lang="en" className={inter.variable}>
       <body>
         <Providers>{children}</Providers>
       </body>
