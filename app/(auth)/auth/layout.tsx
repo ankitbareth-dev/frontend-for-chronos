@@ -6,7 +6,7 @@ export default function AuthLayout({
 }: {
   children: React.ReactNode;
 }) {
-  useAuth(); // auto-check auth and redirect if needed
+  useAuth();
 
   return <div>{children}</div>;
 }

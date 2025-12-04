@@ -69,7 +69,7 @@ export const checkAuth = createAsyncThunk(
   "auth/checkAuth",
   async (_, { rejectWithValue }) => {
     try {
-      const user = await authCheckApi(); // this uses credentials
+      const user = await authCheckApi();
       return user;
     } catch {
       return rejectWithValue("Unauthorized");
