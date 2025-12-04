@@ -4,7 +4,7 @@ import {
   signup as signupApi,
   logout as logoutApi,
   authCheck as authCheckApi,
-} from "../../lib/api";
+} from "@/lib/api";
 
 interface User {
   id: string;
@@ -45,9 +45,8 @@ export const login = createAsyncThunk(
   "auth/login",
   async (data: { email: string; password: string }, { rejectWithValue }) => {
     try {
-      await loginApi(data);
-      const user = await authCheckApi(); // get user after login
-      return user;
+      const res = await loginApi(data);
+      return res.user; // expected shape: { id, name, email }
     } catch (err: any) {
       return rejectWithValue(err.message);
     }
@@ -70,9 +69,9 @@ export const checkAuth = createAsyncThunk(
   "auth/checkAuth",
   async (_, { rejectWithValue }) => {
     try {
-      const user = await authCheckApi();
+      const user = await authCheckApi(); // this uses credentials
       return user;
-    } catch (err: any) {
+    } catch {
       return rejectWithValue("Unauthorized");
     }
   }

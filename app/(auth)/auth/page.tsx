@@ -1,19 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./Auth.module.sass";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { login, signup } from "@/store/slices/authSlice";
 
 export default function AuthPage() {
+  const router = useRouter();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, error } = useSelector((state: RootState) => state.auth);
+  const { loading, error, isAuthenticated } = useSelector(
+    (state: RootState) => state.auth
+  );
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/dashboard");
+    }
+  }, [isAuthenticated]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,7 +32,6 @@ export default function AuthPage() {
       dispatch(login({ email, password }));
     } else {
       dispatch(signup({ name, email, password }));
-      // optional: switch to login after signup success
       setMode("login");
     }
   };

@@ -7,50 +7,46 @@ export async function signup(data: {
 }) {
   const res = await fetch(`${API_BASE}/api/auth/signup`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
-    credentials: "include",
   });
 
-  if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.message || "Signup failed");
-  }
-
-  return await res.json();
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error || json.message || "Signup failed");
+  return json;
 }
 
 export async function login(data: { email: string; password: string }) {
+  alert("hello");
   const res = await fetch(`${API_BASE}/api/auth/login`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
-  });
-
-  if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.message || "Login failed");
-  }
-
-  return await res.json();
-}
-
-export async function logout() {
-  const res = await fetch(`${API_BASE}/api/auth/logout`, {
-    method: "POST",
     credentials: "include",
   });
 
-  if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.message || "Logout failed");
-  }
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error || json.message || "Login failed");
+  return json;
+}
 
-  return await res.json();
+export async function logout() {
+  try {
+    const res = await fetch(`${API_BASE}/api/auth/logout`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || "Logout failed");
+    }
+    return await res.json();
+  } catch (err: any) {
+    alert("Error: " + err.message);
+    throw err;
+  }
 }
 
 export async function authCheck() {
