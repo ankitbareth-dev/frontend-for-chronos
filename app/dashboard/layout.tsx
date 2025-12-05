@@ -1,8 +1,8 @@
 "use client";
 
-import Topbar from "./components/Topbar/Topbar";
-import Sidebar from "./components/Sidebar/Sidebar";
-import MobileMenu from "./components/MobileMenu/MobileMenu";
+import Topbar from "@/components/Topbar/Topbar";
+import Sidebar from "@/components/Sidebar/Sidebar";
+import MobileMenu from "@/components/MobileMenu/MobileMenu";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";

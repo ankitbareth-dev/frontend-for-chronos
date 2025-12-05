@@ -4,7 +4,7 @@ import styles from "./Topbar.module.sass";
 import { FiMoon, FiSun, FiMenu } from "react-icons/fi";
 import { useTheme } from "next-themes";
 import { useEffect, useRef } from "react";
-import { useMediaQuery } from "../../../hooks/useMediaQuery";
+import { useMediaQuery } from "../../app/hooks/useMediaQuery";
 import ClockIcon from "./ClockIcon";
 
 export default function Topbar({ onOpenMobileMenu }: any) {

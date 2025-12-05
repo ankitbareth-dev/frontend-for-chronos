@@ -3,26 +3,38 @@
   padding: 0
   box-sizing: border-box
 
+/* ===============================
+   GLOBAL LIGHT THEME (DEFAULT)
+   =============================== */
+:root
+  --font-inter: 'Inter'
+
+  /* Layout */
+  --topbar-height: clamp(60px, 6vw, 70px)
+  --sidebar-width: 260px
+  --sidebar-collapsed-width: 76px
+
+  /* 🌤 Softer Light Mode Colors */
+  --bg-main: #eef0f5          /* Smooth soft background */
+  --bg-topbar: #f5f6fa         /* Softer top bar */
+  --card-bg: #ffffff           /* Clean white card */
+  
+  --text-primary: #1c1c1c
+  --text-secondary: #6f6f6f
+
+  --logo-color: #3366ff
+  --hover-bg: rgba(0, 0, 0, 0.05)
+  --border-color: rgba(0, 0, 0, 0.08)
+
 html, body
   height: 100%
   width: 100%
   background: var(--bg-main)
   color: var(--text-primary)
-  transition: background .3s ease, color .3s ease
   font-family: var(--font-inter), sans-serif
+  transition: background .3s ease, color .3s ease
 
-:root
-  --font-inter: 'Inter'
-  --topbar-height: clamp(60px, 6vw, 70px)
-  --sidebar-width: 260px
-  --sidebar-collapsed-width: 76px
-  --bg-main: #f2f3f7
-  --bg-topbar: #ffffff
-  --text-primary: #1c1c1c
-  --text-secondary: #545454
-  --logo-color: #0044ff
-  --hover-bg: rgba(0, 0, 0, 0.04)
-  --border-color: rgba(0, 0, 0, 0.1)
+  /* Scrollbar */
   &::-webkit-scrollbar
     width: 8px
 
@@ -30,16 +42,20 @@ html, body
     background: var(--bg-topbar)
 
   &::-webkit-scrollbar-thumb
-    background: rgba(0, 0, 0, 0.1)
+    background: rgba(0, 0, 0, 0.12)
     border-radius: 4px
 
     &:hover
-      background: rgba(0, 0, 0, 0.15)
+      background: rgba(0, 0, 0, 0.18)
 
 
+/* ===============================
+   🌙 DARK THEME
+   =============================== */
 [data-theme="dark"]
   --bg-main: #0f1117
   --bg-topbar: #141726
+  --card-bg: #1a1d2e
 
   --text-primary: #f1f1f1
   --text-secondary: #c6c6c6
@@ -48,6 +64,7 @@ html, body
   --hover-bg: rgba(255, 255, 255, 0.06)
   --border-color: rgba(255, 255, 255, 0.12)
 
+  /* Dark Scrollbar */
   &::-webkit-scrollbar
     width: 8px
 
@@ -55,8 +72,20 @@ html, body
     background: var(--bg-topbar)
 
   &::-webkit-scrollbar-thumb
-    background: rgba(255, 255, 255, 0.1)
+    background: rgba(255, 255, 255, 0.12)
     border-radius: 4px
 
     &:hover
-      background: rgba(255, 255, 255, 0.15)
+      background: rgba(255, 255, 255, 0.18)
+
+
+/* ===============================
+   REUSABLE CARD STYLE
+   =============================== */
+.card
+  background: var(--card-bg)
+  border: 1px solid var(--border-color)
+  border-radius: 16px
+  padding: 24px
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04)
+  transition: background .3s ease, border .3s ease

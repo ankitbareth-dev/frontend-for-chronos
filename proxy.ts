@@ -5,11 +5,14 @@ export function proxy(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
   const { pathname } = req.nextUrl;
 
-  if (!token && pathname.startsWith("/dashboard")) {
-    return NextResponse.redirect(new URL("/auth", req.url));
+  const isDashboard = pathname.startsWith("/dashboard");
+  const isHome = pathname === "/";
+
+  if (!token && isDashboard) {
+    return NextResponse.redirect(new URL("/", req.url));
   }
 
-  if (token && pathname.startsWith("/auth")) {
+  if (token && isHome) {
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
@@ -17,5 +20,5 @@ export function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/:path*"],
+  matcher: ["/dashboard/:path*", "/"],
 };
