@@ -3,38 +3,47 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./Auth.module.sass";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store/store";
-import { login, signup } from "@/store/slices/authSlice";
+
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+
+import { useAuthActions } from "@/hooks/useAuthActions";
 
 export default function AuthPage() {
   const router = useRouter();
+
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const dispatch = useDispatch<AppDispatch>();
-  const { loading, error, isAuthenticated } = useSelector(
-    (state: RootState) => state.auth
-  );
+  const { loginMutation, signupMutation } = useAuthActions();
 
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+
+  // Redirect to dashboard when authenticated
   useEffect(() => {
-    if (isAuthenticated) {
-      router.push("/dashboard");
-    }
+    if (isAuthenticated) router.push("/dashboard");
   }, [isAuthenticated]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (mode === "login") {
-      dispatch(login({ email, password }));
+      loginMutation.mutate({ email, password });
     } else {
-      dispatch(signup({ name, email, password }));
-      setMode("login");
+      signupMutation.mutate(
+        { name, email, password },
+        {
+          onSuccess: () => setMode("login"),
+        }
+      );
     }
   };
+
+  const loading = loginMutation.isPending || signupMutation.isPending;
+
+  const error = loginMutation.error?.message || signupMutation.error?.message;
 
   return (
     <div className={styles.wrapper}>
@@ -58,7 +67,7 @@ export default function AuthPage() {
           <div className={styles.inputGroup}>
             <label>Email</label>
             <input
-              type="text"
+              type="email"
               placeholder="Enter your email"
               required
               value={email}

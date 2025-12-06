@@ -12,14 +12,11 @@ import {
 } from "react-icons/fi";
 import styles from "./Sidebar.module.sass";
 
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/store";
-import { logoutUser } from "@/store/slices/authSlice";
+import { useAuthActions } from "@/hooks/useAuthActions";
 
 const NAV = [
   { label: "Dashboard", href: "/dashboard", Icon: FiGrid },
   { label: "Matrices", href: "/dashboard/matrices", Icon: FiLayers },
-
   { label: "Profile", href: "/dashboard/profile", Icon: FiUser },
 ];
 
@@ -28,7 +25,7 @@ export default function Sidebar() {
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
 
-  const dispatch = useDispatch<AppDispatch>();
+  const { logoutMutation } = useAuthActions();
 
   useEffect(() => {
     const saved = localStorage.getItem("sidebar-collapsed");
@@ -77,7 +74,7 @@ export default function Sidebar() {
 
         <button
           className={styles.logout}
-          onClick={() => dispatch(logoutUser())}
+          onClick={() => logoutMutation.mutate()}
         >
           <FiLogOut className={styles.icon} />
           {!collapsed && <span className={styles.label}>Logout</span>}
