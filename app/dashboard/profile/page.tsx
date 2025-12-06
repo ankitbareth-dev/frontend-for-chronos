@@ -1,51 +1,60 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { FiCamera, FiUser, FiShield } from "react-icons/fi";
 import styles from "./Profile.module.sass";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { useProfileActions } from "@/hooks/useProfileActions";
 
 const Profile = () => {
-  const [name, setName] = useState("Ankit");
-  const [email, setEmail] = useState("ankit@mail.com");
-  const [oldPass, setOldPass] = useState("");
-  const [newPass, setNewPass] = useState("");
+  const user = useSelector((state: RootState) => state.auth.user);
+  const { updateProfileMutation } = useProfileActions();
 
-  const handle = (setter: any) => (e: ChangeEvent<HTMLInputElement>) =>
-    setter(e.target.value);
+  const [name, setName] = useState(user?.name || "");
+  const [email, setEmail] = useState(user?.email || "");
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+
+  if (!user) return <div>Loading...</div>;
+
+  // ---------------- PROFILE INFO ----------------
+  const handleProfileSave = () => {
+    const payload: { name?: string; email?: string } = {};
+    if (name !== user.name) payload.name = name;
+    if (email !== user.email) payload.email = email;
+
+    if (Object.keys(payload).length === 0) return; // nothing to update
+
+    updateProfileMutation.mutate(payload);
+  };
+
+  // ---------------- PASSWORD ----------------
+  const handlePasswordUpdate = () => {
+    if (!oldPassword || !newPassword) return; // require both
+    const payload = { oldPassword, newPassword };
+    updateProfileMutation.mutate(payload);
+  };
 
   return (
     <div className={styles.page}>
       <div className={styles.wrapper}>
-        {/* TOP PROFILE CARD (FULL WIDTH) */}
+        {/* TOP PROFILE CARD */}
         <section className={styles.profileTop}>
-          <div className={styles.avatarLarge}>{name.charAt(0)}</div>
-
+          <div className={styles.avatarLarge}>{user.name.charAt(0)}</div>
           <div className={styles.topInfo}>
-            <h2>{name}</h2>
-            <p>{email}</p>
-
+            <h2>{user.name}</h2>
+            <p>{user.email}</p>
             <button className={styles.secondaryBtn}>
               <FiCamera size={16} />
               Change Photo
             </button>
           </div>
-
-          <div className={styles.metaGrid}>
-            <div>
-              <span>Membership</span>
-              <p>Standard User</p>
-            </div>
-
-            <div>
-              <span>Joined</span>
-              <p>Jan 2025</p>
-            </div>
-          </div>
         </section>
 
         {/* BOTTOM GRID */}
         <div className={styles.bottomGrid}>
-          {/* LEFT → PROFILE INFO */}
+          {/* PROFILE INFO */}
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
               <FiUser className={styles.icon} />
@@ -54,18 +63,28 @@ const Profile = () => {
 
             <div className={styles.field}>
               <label>Name</label>
-              <input type="text" value={name} onChange={handle(setName)} />
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
             </div>
 
             <div className={styles.field}>
               <label>Email</label>
-              <input type="email" value={email} onChange={handle(setEmail)} />
+              <input
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
 
-            <button className={styles.primaryBtn}>Save Changes</button>
+            <button className={styles.primaryBtn} onClick={handleProfileSave}>
+              Save Profile
+            </button>
           </section>
 
-          {/* RIGHT → SECURITY */}
+          {/* SECURITY */}
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
               <FiShield className={styles.icon} />
@@ -76,8 +95,8 @@ const Profile = () => {
               <label>Old Password</label>
               <input
                 type="password"
-                value={oldPass}
-                onChange={handle(setOldPass)}
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
               />
             </div>
 
@@ -85,12 +104,17 @@ const Profile = () => {
               <label>New Password</label>
               <input
                 type="password"
-                value={newPass}
-                onChange={handle(setNewPass)}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
               />
             </div>
 
-            <button className={styles.primaryBtn}>Update Password</button>
+            <button
+              className={styles.primaryBtn}
+              onClick={handlePasswordUpdate}
+            >
+              Update Password
+            </button>
           </section>
         </div>
       </div>
