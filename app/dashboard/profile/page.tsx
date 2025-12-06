@@ -1,93 +1,80 @@
 "use client";
 
 import { ChangeEvent, useState } from "react";
-import { FiCamera, FiMail, FiUser, FiShield } from "react-icons/fi";
+import { FiCamera, FiUser, FiShield } from "react-icons/fi";
 import styles from "./Profile.module.sass";
 
 const Profile = () => {
-  const [name, setName] = useState<string>("Ankit");
-  const [email, setEmail] = useState<string>("ankit@mail.com");
-  const [oldPass, setOldPass] = useState<string>("");
-  const [newPass, setNewPass] = useState<string>("");
+  const [name, setName] = useState("Ankit");
+  const [email, setEmail] = useState("ankit@mail.com");
+  const [oldPass, setOldPass] = useState("");
+  const [newPass, setNewPass] = useState("");
 
-  const handle =
-    (setter: (value: string) => void) => (e: ChangeEvent<HTMLInputElement>) =>
-      setter(e.target.value);
+  const handle = (setter: any) => (e: ChangeEvent<HTMLInputElement>) =>
+    setter(e.target.value);
 
   return (
     <div className={styles.page}>
       <div className={styles.wrapper}>
-        {/* Sidebar */}
-        <aside className={styles.sidebar}>
-          <div className={styles.avatarSection}>
-            <div className={styles.avatar}>{name.charAt(0)}</div>
+        {/* TOP PROFILE CARD (FULL WIDTH) */}
+        <section className={styles.profileTop}>
+          <div className={styles.avatarLarge}>{name.charAt(0)}</div>
 
-            <h3 className={styles.username}>{name}</h3>
-            <p className={styles.userEmail}>{email}</p>
+          <div className={styles.topInfo}>
+            <h2>{name}</h2>
+            <p>{email}</p>
 
             <button className={styles.secondaryBtn}>
               <FiCamera size={16} />
               Change Photo
             </button>
+          </div>
 
-            <div className={styles.infoList}>
-              <div>
-                <span>Membership</span>
-                <p>Standard User</p>
-              </div>
-              <div>
-                <span>Joined</span>
-                <p>Jan 2025</p>
-              </div>
+          <div className={styles.metaGrid}>
+            <div>
+              <span>Membership</span>
+              <p>Standard User</p>
+            </div>
+
+            <div>
+              <span>Joined</span>
+              <p>Jan 2025</p>
             </div>
           </div>
-        </aside>
+        </section>
 
-        {/* Main Content */}
-        <main className={styles.content}>
-          {/* Profile Information */}
-          <div className={styles.section}>
+        {/* BOTTOM GRID */}
+        <div className={styles.bottomGrid}>
+          {/* LEFT → PROFILE INFO */}
+          <section className={styles.section}>
             <div className={styles.sectionHeader}>
-              <FiUser className={styles.icon} size={20} />
+              <FiUser className={styles.icon} />
               <h2>Profile Information</h2>
             </div>
 
             <div className={styles.field}>
-              <label className={styles.label}>Name</label>
-              <input
-                className={styles.input}
-                type="text"
-                value={name}
-                onChange={handle(setName)}
-                placeholder="Enter your name"
-              />
+              <label>Name</label>
+              <input type="text" value={name} onChange={handle(setName)} />
             </div>
 
             <div className={styles.field}>
-              <label className={styles.label}>Email</label>
-              <input
-                className={styles.input}
-                type="email"
-                value={email}
-                onChange={handle(setEmail)}
-                placeholder="Enter email"
-              />
+              <label>Email</label>
+              <input type="email" value={email} onChange={handle(setEmail)} />
             </div>
 
             <button className={styles.primaryBtn}>Save Changes</button>
-          </div>
+          </section>
 
-          {/* Security Section */}
-          <div className={styles.section}>
+          {/* RIGHT → SECURITY */}
+          <section className={styles.section}>
             <div className={styles.sectionHeader}>
-              <FiShield className={styles.icon} size={20} />
+              <FiShield className={styles.icon} />
               <h2>Security</h2>
             </div>
 
             <div className={styles.field}>
-              <label className={styles.label}>Old Password</label>
+              <label>Old Password</label>
               <input
-                className={styles.input}
                 type="password"
                 value={oldPass}
                 onChange={handle(setOldPass)}
@@ -95,19 +82,17 @@ const Profile = () => {
             </div>
 
             <div className={styles.field}>
-              <label className={styles.label}>New Password</label>
+              <label>New Password</label>
               <input
-                className={styles.input}
                 type="password"
                 value={newPass}
                 onChange={handle(setNewPass)}
-                placeholder="Enter new password"
               />
             </div>
 
             <button className={styles.primaryBtn}>Update Password</button>
-          </div>
-        </main>
+          </section>
+        </div>
       </div>
     </div>
   );
