@@ -1,9 +1,9 @@
 "use client";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { setUser, clearUser } from "@/store/slices/authSlice";
-
 import {
   loginApi,
   signupApi,
@@ -16,27 +16,34 @@ export function useAuthActions() {
   const dispatch = useDispatch();
 
   // -------------------------
-  // AUTH CHECK (auto on mount)
+  // AUTH CHECK (runs on mount)
   // -------------------------
-  const authCheckQuery = useQuery<AuthUser>({
+  const authCheckQuery = useQuery({
     queryKey: ["auth-user"],
     queryFn: authCheckApi,
     retry: false,
     staleTime: Infinity,
-    onSuccess: (user) => {
-      dispatch(setUser(user));
-    },
-    onError: () => {
-      dispatch(clearUser());
-    },
   });
+
+  // Update Redux when data or error changes
+  useEffect(() => {
+    if (authCheckQuery.data) {
+      dispatch(setUser(authCheckQuery.data));
+    }
+  }, [authCheckQuery.data, dispatch]);
+
+  useEffect(() => {
+    if (authCheckQuery.error) {
+      dispatch(clearUser());
+    }
+  }, [authCheckQuery.error, dispatch]);
 
   // -------------------------
   // LOGIN
   // -------------------------
   const loginMutation = useMutation({
     mutationFn: loginApi,
-    onSuccess: (user) => {
+    onSuccess: (user: AuthUser) => {
       dispatch(setUser(user));
     },
   });
@@ -46,6 +53,9 @@ export function useAuthActions() {
   // -------------------------
   const signupMutation = useMutation({
     mutationFn: signupApi,
+    onSuccess: (user: AuthUser) => {
+      dispatch(setUser(user));
+    },
   });
 
   // -------------------------
@@ -58,10 +68,5 @@ export function useAuthActions() {
     },
   });
 
-  return {
-    authCheckQuery,
-    loginMutation,
-    signupMutation,
-    logoutMutation,
-  };
+  return { authCheckQuery, loginMutation, signupMutation, logoutMutation };
 }

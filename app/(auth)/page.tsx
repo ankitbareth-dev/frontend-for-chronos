@@ -21,7 +21,6 @@ export default function AuthPage() {
 
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
-  // Redirect to dashboard when authenticated
   useEffect(() => {
     if (isAuthenticated) router.push("/dashboard");
   }, [isAuthenticated]);
