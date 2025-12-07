@@ -1,0 +1,80 @@
+.overlay
+  position: fixed
+  inset: 0
+  background: rgba(0, 0, 0, 0.55)
+  display: flex
+  align-items: center
+  justify-content: center
+  backdrop-filter: blur(5px)
+  z-index: 999
+
+.modal
+  width: 430px
+  padding: 24px
+  background: var(--card-bg)
+  border: 1px solid var(--border-color)
+  border-radius: 14px
+  display: flex
+  flex-direction: column
+  gap: 18px
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35)
+
+.title
+  background: var(--card-bg)
+  margin: 0
+  font-size: 22px
+  font-weight: 600
+ 
+
+
+.formGroup
+  display: flex
+  flex-direction: column
+  gap: 6px
+
+.label
+  font-size: 14px
+  color: var(--text-secondary)
+
+.input
+  padding: 10px 12px
+  border-radius: 8px
+  border: 1px solid var(--border-color)
+  background: var(--input-bg)
+  color: var(--text-primary)
+  font-size: 14px
+  outline: none
+
+.row
+  display: flex
+  gap: 15px
+
+.actions
+  display: flex
+  justify-content: flex-end
+  gap: 12px
+  margin-top: 10px
+
+.cancel
+  padding: 9px 18px
+  background: transparent
+  border: 1px solid var(--border-color)
+  color: var(--text-primary)
+  border-radius: 8px
+  cursor: pointer
+  transition: .2s ease
+
+.cancel:hover
+  background: var(--border-color)
+
+.create
+  padding: 9px 18px
+  background: var(--primary)
+  color: #fff
+  border: none
+  border-radius: 8px
+  cursor: pointer
+  transition: .2s ease
+
+.create:hover
+  opacity: .9
