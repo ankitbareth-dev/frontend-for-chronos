@@ -3,9 +3,13 @@
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useMatricesActions } from "@/hooks/useMatricesActions";
+import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import styles from "./UserMatrices.module.sass";
 
 const UserMatrices = () => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const user = useSelector((state: RootState) => state.auth.user);
   const { matricesQuery } = useMatricesActions();
 
@@ -30,7 +34,14 @@ const UserMatrices = () => {
   return (
     <div className={styles.metricsList}>
       {matrices.map((item: any) => (
-        <div key={item.id} className={styles.metricCard}>
+        <div
+          key={item.id}
+          className={styles.metricCard}
+          onClick={() => {
+            queryClient.setQueryData(["selected-matrix"], item);
+            router.push(`/dashboard/matrices/${item.id}`);
+          }}
+        >
           <h3 className={styles.metricTitle}>{item.name}</h3>
         </div>
       ))}
