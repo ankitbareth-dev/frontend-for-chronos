@@ -29,6 +29,7 @@ async function deleteCategoryAPI(id: string) {
   const res = await fetch("http://localhost:5000/api/category/delete", {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
     body: JSON.stringify({ id }),
   });
   return res.json();
@@ -38,6 +39,7 @@ async function editCategoryAPI(cat: any) {
   const res = await fetch("http://localhost:5000/api/category/edit", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
     body: JSON.stringify(cat),
   });
   return res.json();
