@@ -1,13 +1,12 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
-import styles from "./MatrixDetailPage.module.sass";
 import dayjs from "dayjs";
+import styles from "./MatrixDetailPage.module.sass";
 
-export default function MatrixDetailPage({ params }: any) {
-  const router = useRouter();
+import MatrixCategories from "@/components/MatrixCategories/MatrixCategories";
+
+export default function MatrixDetailPage() {
   const queryClient = useQueryClient();
   const matrix: any = queryClient.getQueryData(["selected-matrix"]);
 
@@ -19,72 +18,77 @@ export default function MatrixDetailPage({ params }: any) {
     );
   }
 
-  // Generate dates from startDate to endDate
+  /** ------------------------------------
+   *  1) Generate Dates
+   -------------------------------------*/
   const start = dayjs(matrix.startDate);
   const end = dayjs(matrix.endDate);
-  const dates = [];
-  for (
-    let d = start;
-    d.isBefore(end) || d.isSame(end, "day");
-    d = d.add(1, "day")
-  ) {
+
+  const dates: dayjs.Dayjs[] = [];
+  for (let d = start; d.isBefore(end) || d.isSame(end); d = d.add(1, "day")) {
     dates.push(d);
   }
 
-  // Generate times based on interval
-  const times = [];
-  const startTime = dayjs(`2025-01-01T${matrix.startTime}:00`);
-  const endTime = dayjs(`2025-01-01T${matrix.endTime}:00`);
-  let currentTime = startTime;
-  while (currentTime.isBefore(endTime) || currentTime.isSame(endTime)) {
-    times.push(currentTime.format("HH:mm"));
-    currentTime = currentTime.add(matrix.interval, "minute");
+  /** ------------------------------------
+   *  2) Generate Time Slots
+   -------------------------------------*/
+  const startTime = dayjs(`2025-01-01T${matrix.startTime}`);
+  const endTime = dayjs(`2025-01-01T${matrix.endTime}`);
+
+  const times: string[] = [];
+  let t = startTime;
+
+  while (t.isSame(endTime) || t.isBefore(endTime)) {
+    times.push(t.format("h A"));
+    t = t.add(matrix.interval, "minute");
   }
 
   return (
     <div className={styles.page}>
-      <button onClick={() => router.back()} className={styles.backButton}>
-        <ArrowLeft size={18} /> Back
-      </button>
+      <div className={styles.layout}>
+        {/* MATRIX CARD */}
+        <div className={styles.card}>
+          <h1 className={styles.cardTitle}>{matrix.name}</h1>
 
-      <div className={styles.card}>
-        <h1 className={styles.cardTitle}>{matrix.name}</h1>
+          <div
+            className={styles.matrixGrid}
+            style={{
+              gridTemplateColumns: `120px repeat(${dates.length}, 1fr)`,
+            }}
+          >
+            {/* Empty Corner */}
+            <div className={`${styles.matrixCell} ${styles.header}`} />
 
-        <div className={styles.matrixGrid}>
-          {/* Top-left empty cell */}
-          <div className={`${styles.matrixCell} ${styles.header}`} />
-
-          {/* Date headers */}
-          {dates.map((date, idx) => (
-            <div key={idx} className={`${styles.matrixCell} ${styles.header}`}>
-              {date.format("DD MMM")}
-            </div>
-          ))}
-
-          {/* Time rows */}
-          {times
-            .map((time, tIdx) => (
-              <div
-                key={`time-${tIdx}`}
-                className={`${styles.matrixCell} ${styles.timeHeader}`}
-              >
-                {time}
+            {/* Dates */}
+            {dates.map((date, i) => (
+              <div key={i} className={`${styles.matrixCell} ${styles.header}`}>
+                {date.format("DD MMM")}
               </div>
-            ))
-            .flatMap((timeCell, tIdx) => {
-              return [
-                timeCell,
-                ...dates.map((date, dIdx) => (
+            ))}
+
+            {/* Time Rows */}
+            {times.map((time, rowIndex) => (
+              <>
+                <div
+                  key={`time-${rowIndex}`}
+                  className={`${styles.matrixCell} ${styles.timeHeader}`}
+                >
+                  {time}
+                </div>
+
+                {dates.map((_, colIndex) => (
                   <div
-                    key={`cell-${tIdx}-${dIdx}`}
+                    key={`cell-${rowIndex}-${colIndex}`}
                     className={styles.matrixCell}
-                  >
-                    {/* You can render matrix.cells info here if available */}
-                  </div>
-                )),
-              ];
-            })}
+                  />
+                ))}
+              </>
+            ))}
+          </div>
         </div>
+
+        {/* CATEGORIES SIDEBAR */}
+        <MatrixCategories />
       </div>
     </div>
   );
