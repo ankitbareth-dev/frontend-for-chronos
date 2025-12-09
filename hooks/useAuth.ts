@@ -9,5 +9,9 @@ export function useAuth() {
   const user = useSelector((state: RootState) => state.auth.user);
   const isAuthenticated = !!user;
 
-  return { user, isAuthenticated, authLoading: authCheckQuery.isLoading };
+  return {
+    user,
+    isAuthenticated,
+    authLoading: authCheckQuery.isLoading,
+  };
 }
