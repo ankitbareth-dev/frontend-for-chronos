@@ -15,14 +15,15 @@ import {
 export function useAuthActions() {
   const dispatch = useDispatch();
 
-  // -------------------------
-  // AUTH CHECK (runs on mount)
-  // -------------------------
   const authCheckQuery = useQuery({
     queryKey: ["auth-user"],
     queryFn: authCheckApi,
     retry: false,
     staleTime: Infinity,
+    gcTime: Infinity,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 
   useEffect(() => {
@@ -37,9 +38,6 @@ export function useAuthActions() {
     }
   }, [authCheckQuery.error, dispatch]);
 
-  // -------------------------
-  // LOGIN
-  // -------------------------
   const loginMutation = useMutation({
     mutationFn: loginApi,
     onSuccess: (user: AuthUser) => {
@@ -47,9 +45,6 @@ export function useAuthActions() {
     },
   });
 
-  // -------------------------
-  // SIGNUP
-  // -------------------------
   const signupMutation = useMutation({
     mutationFn: signupApi,
     onSuccess: (user: AuthUser) => {
@@ -57,9 +52,6 @@ export function useAuthActions() {
     },
   });
 
-  // -------------------------
-  // LOGOUT
-  // -------------------------
   const logoutMutation = useMutation({
     mutationFn: logoutApi,
     onSuccess: () => {
