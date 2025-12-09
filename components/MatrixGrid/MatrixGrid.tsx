@@ -15,8 +15,11 @@ interface MatrixData {
 
 export default function MatrixGrid({ matrixId }: { matrixId: string }) {
   const [matrix, setMatrix] = useState<MatrixData | null>(null);
+  const [cellColors, setCellColors] = useState<Record<number, string>>({});
 
-  // Fetch matrix data
+  /** ------------------------------------
+   * Fetch matrix data
+   ------------------------------------ */
   useEffect(() => {
     async function loadMatrix() {
       try {
@@ -35,6 +38,32 @@ export default function MatrixGrid({ matrixId }: { matrixId: string }) {
     }
 
     loadMatrix();
+  }, [matrixId]);
+
+  /** ------------------------------------
+   * Fetch cell colors
+   ------------------------------------ */
+  useEffect(() => {
+    async function loadCells() {
+      try {
+        const res = await fetch(`http://localhost:5000/api/cell`, {
+          credentials: "include",
+        });
+
+        const json = await res.json();
+        if (json.success) {
+          const map: Record<number, string> = {};
+          json.data.forEach((c: any) => {
+            if (c.colorHex) map[c.index] = c.colorHex;
+          });
+          setCellColors(map);
+        }
+      } catch (err) {
+        console.error("Failed to load cells", err);
+      }
+    }
+
+    loadCells();
   }, [matrixId]);
 
   if (!matrix) return <div className={styles.loading}>Loading matrix...</div>;
@@ -93,10 +122,13 @@ export default function MatrixGrid({ matrixId }: { matrixId: string }) {
 
           {dates.map((_, colIndex) => {
             const index = rowIndex * dates.length + colIndex;
+            const bg = cellColors[index] || "transparent";
+
             return (
               <div
                 key={`cell-${rowIndex}-${colIndex}`}
                 className={styles.cell}
+                style={{ backgroundColor: bg }}
               />
             );
           })}
