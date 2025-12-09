@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import styles from "./MatrixDetailPage.module.sass";
 
@@ -10,10 +11,15 @@ export default function MatrixDetailPage() {
   const queryClient = useQueryClient();
   const matrix: any = queryClient.getQueryData(["selected-matrix"]);
 
+  // -------------------------------------------
+  // 🔼 LIFTED STATE: selected category
+  // -------------------------------------------
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
   if (!matrix) {
     return (
       <div className={styles.noData}>
-        No matrix data found. Please open it from the list.
+        No matrix selected. Please open it from the list.
       </div>
     );
   }
@@ -25,10 +31,22 @@ export default function MatrixDetailPage() {
         <h1 className={styles.headerTitle}>{matrix.name}</h1>
       </div>
 
-      {/* MAIN GRID LAYOUT */}
+      {/* GRID + CATEGORIES */}
       <div className={styles.mainLayout}>
-        <MatrixGrid matrixId={matrix.id} />
-        <MatrixCategories matrixId={matrix.id} />
+        <div className={styles.gridWrapper}>
+          <MatrixGrid
+            matrixId={matrix.id}
+            selectedCategory={selectedCategory} // 👈 pass state
+          />
+        </div>
+
+        <div className={styles.categoryWrapper}>
+          <MatrixCategories
+            matrixId={matrix.id}
+            selectedCategory={selectedCategory} // 👈 current selected
+            onSelectCategory={setSelectedCategory} // 👈 pass setter
+          />
+        </div>
       </div>
     </div>
   );

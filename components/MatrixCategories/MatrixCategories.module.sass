@@ -1,152 +1,174 @@
 .sidebar
   width: 260px
-  background: var(--card-bg)
-  border: 1px solid var(--border-color)
-  border-radius: 1rem
-  padding: 1rem
-  height: fit-content
+  background: #0f0f0f
+  padding: 20px
+  border-radius: 12px
+  border: 1px solid rgba(255,255,255,0.1)
+  display: flex
+  flex-direction: column
+  gap: 16px
 
 .headerRow
   display: flex
-  justify-content: space-between
   align-items: center
-  margin-bottom: 1rem
+  justify-content: space-between
 
 .title
-  font-size: 1.2rem
+  font-size: 20px
   font-weight: 600
-  color: var(--text-primary)
+  color: #fff
 
 .addBtn
-  background: var(--hover-bg)
-  border: none
-  padding: 0.4rem
-  border-radius: 0.5rem
-  cursor: pointer
+  width: 32px
+  height: 32px
   display: flex
   align-items: center
   justify-content: center
-  font-size: 1rem
+  background: #1a1a1a
+  border: 1px solid rgba(255,255,255,0.1)
+  border-radius: 6px
+  color: #fff
+  cursor: pointer
   transition: 0.2s
 
   &:hover
-    background: var(--hover-2)
+    background: #222
 
 .list
   display: flex
   flex-direction: column
-  gap: 0.6rem
+  gap: 10px
+  margin-top: 10px
 
 .category
   display: flex
-  align-items: center
-  gap: 0.6rem
-  padding: 0.6rem 0.7rem
-  border: 1px solid var(--border-color)
-  border-radius: 0.6rem
-  background: var(--bg-main)
   justify-content: space-between
+  align-items: center
+  padding: 10px
+  background: #111
+  border: 1px solid rgba(255,255,255,0.05)
+  border-radius: 8px
+  cursor: pointer
   transition: 0.2s
 
   &:hover
-    background: var(--hover-bg)
+    background: #161616
+
+  &.active
+    border-color: rgba(0,200,255,0.7)
+    background: rgba(0,200,255,0.1)
+
+.left
+  display: flex
+  align-items: center
+  gap: 10px
+  flex: 1
 
 .colorDot
   width: 14px
   height: 14px
   border-radius: 50%
-  border: 2px solid #fff
-  flex-shrink: 0
+  border: 2px solid #000
+
+.name
+  font-size: 15px
+  color: #eaeaea
+  font-weight: 500
 
 .actions
   display: flex
-  gap: 0.4rem
+  align-items: center
+  gap: 8px
 
-.icon, .iconDelete
+.icon
+  color: #cfcfcf
   cursor: pointer
-  font-size: 0.95rem
-  transition: 0.2s
-  color: var(--text-secondary)
+  transition: 0.15s
 
   &:hover
-    color: var(--text-primary)
+    color: #fff
 
 .iconDelete
-  color: #e63946
+  color: #ff4d4d
+  cursor: pointer
+  transition: 0.15s
 
   &:hover
-    color: #d62828
+    color: #ff7777
 
 .empty
+  color: #777
+  font-size: 14px
+  padding: 10px 0
   text-align: center
-  padding: 1rem
-  color: var(--text-secondary)
 
-/* ---------- MODAL ---------- */
+
 
 .modalBackdrop
   position: fixed
-  top: 0
-  left: 0
-  width: 100%
-  height: 100%
-  background: rgba(0,0,0,0.5)
+  inset: 0
+  background: rgba(0,0,0,0.7)
   display: flex
   align-items: center
   justify-content: center
-  z-index: 200
+  z-index: 500
 
 .modal
-  background: var(--card-bg)
-  padding: 1.5rem
-  border-radius: 1rem
-  width: 320px
-  border: 1px solid var(--border-color)
-  animation: fadeIn 0.15s ease-out
+  width: 360px
+  background: #111
+  padding: 20px
+  border-radius: 12px
+  border: 1px solid rgba(255,255,255,0.1)
+  display: flex
+  flex-direction: column
+  gap: 12px
 
 .modal h3
-  margin-bottom: 1rem
-  font-size: 1.3rem
-  color: var(--text-primary)
+  margin-bottom: 6px
+  font-size: 18px
+  font-weight: 600
+  color: #fff
 
 .input
   width: 100%
-  padding: 0.6rem
-  border-radius: 0.5rem
-  border: 1px solid var(--border-color)
-  margin-bottom: 1rem
-  background: var(--bg-main)
-  color: var(--text-primary)
+  padding: 10px
+  background: #0f0f0f
+  border: 1px solid rgba(255,255,255,0.1)
+  border-radius: 6px
+  color: #fff
+  outline: none
+  font-size: 14px
+
+  &:focus
+    border-color: rgba(0,200,255,0.6)
 
 .buttonRow
   display: flex
   justify-content: flex-end
-  gap: 0.6rem
-
-.cancelBtn, .saveBtn
-  padding: 0.6rem 1rem
-  border-radius: 0.5rem
-  cursor: pointer
-  border: none
-  transition: 0.2s
+  gap: 10px
+  margin-top: 10px
 
 .cancelBtn
-  background: var(--hover-bg)
+  padding: 8px 14px
+  background: #222
+  border-radius: 6px
+  color: #ccc
+  border: 1px solid rgba(255,255,255,0.1)
+  cursor: pointer
+  transition: 0.2s
 
   &:hover
-    background: var(--hover-2)
+    background: #333
 
 .saveBtn
-  background: var(--accent-1)
-  color: #fff
+  padding: 8px 14px
+  background: #00b7ff
+  border-radius: 6px
+  color: #000
+  border: none
+  cursor: pointer
+  transition: 0.2s
+  font-weight: 600
 
   &:hover
-    opacity: 0.9
-
-@keyframes fadeIn
-  from
-    opacity: 0
-    transform: scale(0.97)
-  to
-    opacity: 1
-    transform: scale(1)
+    background: #00c9ff

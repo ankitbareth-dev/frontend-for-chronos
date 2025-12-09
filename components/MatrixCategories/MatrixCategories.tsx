@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from "react";
 import styles from "./MatrixCategories.module.sass";
-import { FiTag, FiTrash2, FiEdit2, FiPlus } from "react-icons/fi";
+import { FiTrash2, FiEdit2, FiPlus } from "react-icons/fi";
 
 interface MatrixCategoriesProps {
   matrixId: string;
+  selectedCategoryId?: string | null;
+  onSelectCategory?: (cat: any | null) => void;
 }
 
 /* -----------------------------------------
@@ -53,7 +55,11 @@ async function editCategoryAPI(cat: any) {
    COMPONENT
 -------------------------------------------*/
 
-export default function MatrixCategories({ matrixId }: MatrixCategoriesProps) {
+export default function MatrixCategories({
+  matrixId,
+  selectedCategoryId,
+  onSelectCategory,
+}: MatrixCategoriesProps) {
   const [categories, setCategories] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -112,6 +118,17 @@ export default function MatrixCategories({ matrixId }: MatrixCategoriesProps) {
   const handleDelete = async (id: string) => {
     await deleteCategoryAPI(id);
     loadCategories();
+
+    if (selectedCategoryId === id && onSelectCategory) {
+      onSelectCategory(null);
+    }
+  };
+
+  /* -------------------- Handle Select Category -------------------- */
+  const selectCategory = (cat: any) => {
+    if (onSelectCategory) {
+      onSelectCategory(cat);
+    }
   };
 
   return (
@@ -133,27 +150,38 @@ export default function MatrixCategories({ matrixId }: MatrixCategoriesProps) {
 
       {/* Category List */}
       <div className={styles.list}>
-        {categories.map((cat) => (
-          <div key={cat.id} className={styles.category}>
+        {categories.map((cat) => {
+          const isSelected = cat.id === selectedCategoryId;
+
+          return (
             <div
-              className={styles.colorDot}
-              style={{ backgroundColor: cat.color }}
-            />
+              key={cat.id}
+              className={`${styles.category} ${
+                isSelected ? styles.active : ""
+              }`}
+            >
+              <div className={styles.left} onClick={() => selectCategory(cat)}>
+                <div
+                  className={styles.colorDot}
+                  style={{ backgroundColor: cat.color }}
+                />
 
-            <span>{cat.name}</span>
+                <span className={styles.name}>{cat.name}</span>
+              </div>
 
-            <div className={styles.actions}>
-              <FiEdit2
-                className={styles.icon}
-                onClick={() => openEditModal(cat)}
-              />
-              <FiTrash2
-                className={styles.iconDelete}
-                onClick={() => handleDelete(cat.id)}
-              />
+              <div className={styles.actions}>
+                <FiEdit2
+                  className={styles.icon}
+                  onClick={() => openEditModal(cat)}
+                />
+                <FiTrash2
+                  className={styles.iconDelete}
+                  onClick={() => handleDelete(cat.id)}
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* -----------------------------------------
