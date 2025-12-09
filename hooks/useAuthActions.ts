@@ -25,7 +25,6 @@ export function useAuthActions() {
     staleTime: Infinity,
   });
 
-  // Update Redux when data or error changes
   useEffect(() => {
     if (authCheckQuery.data) {
       dispatch(setUser(authCheckQuery.data));

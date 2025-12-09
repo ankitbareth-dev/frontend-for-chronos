@@ -5,7 +5,6 @@ import Sidebar from "@/components/Sidebar/Sidebar";
 import MobileMenu from "@/components/MobileMenu/MobileMenu";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
 import "../globals.sass";
 
 export default function DashboardLayout({
@@ -13,7 +12,6 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  useAuth();
   const isMobile = useMediaQuery("(max-width: 768px)");
   const [openMenu, setOpenMenu] = useState(false);
 
