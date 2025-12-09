@@ -4,29 +4,33 @@ import { useState, useEffect } from "react";
 import styles from "./MatrixCategories.module.sass";
 import { FiTag, FiTrash2, FiEdit2, FiPlus } from "react-icons/fi";
 
+interface MatrixCategoriesProps {
+  matrixId: string;
+}
+
 /* -----------------------------------------
-   API FUNCTIONS
+   API FUNCTIONS (Matrix-Scoped)
 -------------------------------------------*/
 
-async function fetchCategoriesAPI() {
-  const res = await fetch("http://localhost:5000/api/category/", {
+async function fetchMatrixCategoriesAPI(matrixId: string) {
+  const res = await fetch(`http://localhost:5000/api/categories/${matrixId}`, {
     credentials: "include",
   });
   return res.json();
 }
 
-async function createCategoryAPI(newCat: any) {
-  const res = await fetch("http://localhost:5000/api/category/create", {
+async function createCategoryAPI(matrixId: string, newCat: any) {
+  const res = await fetch("http://localhost:5000/api/categories/create", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
-    body: JSON.stringify(newCat),
+    body: JSON.stringify({ matrixId, ...newCat }),
   });
   return res.json();
 }
 
 async function deleteCategoryAPI(id: string) {
-  const res = await fetch("http://localhost:5000/api/category/delete", {
+  const res = await fetch("http://localhost:5000/api/categories/delete", {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -36,7 +40,7 @@ async function deleteCategoryAPI(id: string) {
 }
 
 async function editCategoryAPI(cat: any) {
-  const res = await fetch("http://localhost:5000/api/category/edit", {
+  const res = await fetch("http://localhost:5000/api/categories/edit", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -49,7 +53,7 @@ async function editCategoryAPI(cat: any) {
    COMPONENT
 -------------------------------------------*/
 
-export default function MatrixCategories() {
+export default function MatrixCategories({ matrixId }: MatrixCategoriesProps) {
   const [categories, setCategories] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -61,16 +65,17 @@ export default function MatrixCategories() {
   const [color, setColor] = useState("#000000");
 
   /* -------------------- Fetch Categories -------------------- */
+
   const loadCategories = async () => {
     setIsLoading(true);
-    const res = await fetchCategoriesAPI();
+    const res = await fetchMatrixCategoriesAPI(matrixId);
     setCategories(res.data || []);
     setIsLoading(false);
   };
 
   useEffect(() => {
-    loadCategories();
-  }, []);
+    if (matrixId) loadCategories();
+  }, [matrixId]);
 
   /* -------------------- Modal Handlers -------------------- */
 
@@ -91,9 +96,13 @@ export default function MatrixCategories() {
 
   const handleSubmit = async () => {
     if (editMode) {
-      await editCategoryAPI({ id: current._id, name, color });
+      await editCategoryAPI({
+        id: current.id,
+        name,
+        color,
+      });
     } else {
-      await createCategoryAPI({ name, color });
+      await createCategoryAPI(matrixId, { name, color });
     }
 
     await loadCategories();
@@ -125,7 +134,7 @@ export default function MatrixCategories() {
       {/* Category List */}
       <div className={styles.list}>
         {categories.map((cat) => (
-          <div key={cat._id} className={styles.category}>
+          <div key={cat.id} className={styles.category}>
             <div
               className={styles.colorDot}
               style={{ backgroundColor: cat.color }}
@@ -140,7 +149,7 @@ export default function MatrixCategories() {
               />
               <FiTrash2
                 className={styles.iconDelete}
-                onClick={() => handleDelete(cat._id)}
+                onClick={() => handleDelete(cat.id)}
               />
             </div>
           </div>

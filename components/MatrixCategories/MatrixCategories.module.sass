@@ -27,6 +27,10 @@
   align-items: center
   justify-content: center
   font-size: 1rem
+  transition: 0.2s
+
+  &:hover
+    background: var(--hover-2)
 
 .list
   display: flex
@@ -36,35 +40,47 @@
 .category
   display: flex
   align-items: center
-  gap: 0.5rem
-  padding: 0.6rem
+  gap: 0.6rem
+  padding: 0.6rem 0.7rem
   border: 1px solid var(--border-color)
   border-radius: 0.6rem
   background: var(--bg-main)
   justify-content: space-between
+  transition: 0.2s
+
+  &:hover
+    background: var(--hover-bg)
 
 .colorDot
   width: 14px
   height: 14px
   border-radius: 50%
   border: 2px solid #fff
+  flex-shrink: 0
 
 .actions
   display: flex
-  gap: 0.3rem
+  gap: 0.4rem
 
 .icon, .iconDelete
   cursor: pointer
-  font-size: 0.9rem
+  font-size: 0.95rem
+  transition: 0.2s
+  color: var(--text-secondary)
+
+  &:hover
+    color: var(--text-primary)
 
 .iconDelete
   color: #e63946
+
+  &:hover
+    color: #d62828
 
 .empty
   text-align: center
   padding: 1rem
   color: var(--text-secondary)
-
 
 /* ---------- MODAL ---------- */
 
@@ -86,9 +102,11 @@
   border-radius: 1rem
   width: 320px
   border: 1px solid var(--border-color)
+  animation: fadeIn 0.15s ease-out
 
 .modal h3
   margin-bottom: 1rem
+  font-size: 1.3rem
   color: var(--text-primary)
 
 .input
@@ -103,17 +121,32 @@
 .buttonRow
   display: flex
   justify-content: flex-end
-  gap: 0.5rem
+  gap: 0.6rem
 
 .cancelBtn, .saveBtn
   padding: 0.6rem 1rem
   border-radius: 0.5rem
   cursor: pointer
   border: none
+  transition: 0.2s
 
 .cancelBtn
   background: var(--hover-bg)
 
+  &:hover
+    background: var(--hover-2)
+
 .saveBtn
   background: var(--accent-1)
   color: #fff
+
+  &:hover
+    opacity: 0.9
+
+@keyframes fadeIn
+  from
+    opacity: 0
+    transform: scale(0.97)
+  to
+    opacity: 1
+    transform: scale(1)
