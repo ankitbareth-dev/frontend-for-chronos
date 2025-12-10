@@ -13,64 +13,86 @@ interface MatrixData {
   interval: number;
 }
 
-export default function MatrixGrid({ matrixId }: { matrixId: string }) {
+export default function MatrixGrid({
+  matrixId,
+  selectedCategory,
+}: {
+  matrixId: string;
+  selectedCategory: any | null;
+}) {
   const [matrix, setMatrix] = useState<MatrixData | null>(null);
-  const [cellColors, setCellColors] = useState<Record<number, string>>({});
 
-  /** ------------------------------------
-   * Fetch matrix data
-   ------------------------------------ */
+  const [cellColors, setCellColors] = useState<Record<number, string>>({});
+  const [pending, setPending] = useState<Record<number, string>>({});
+
+  /* ---------------- LOAD MATRIX ---------------- */
   useEffect(() => {
     async function loadMatrix() {
-      try {
-        const res = await fetch(
-          `http://localhost:5000/api/matrix-data/${matrixId}`,
-          { credentials: "include" }
-        );
-
-        const json = await res.json();
-        if (json.success) {
-          setMatrix(json.data);
-        }
-      } catch (err) {
-        console.error("Failed to load matrix data", err);
-      }
+      const res = await fetch(
+        `http://localhost:5000/api/matrix-data/${matrixId}`,
+        { credentials: "include" }
+      );
+      const json = await res.json();
+      if (json.success) setMatrix(json.data);
     }
-
     loadMatrix();
   }, [matrixId]);
 
-  /** ------------------------------------
-   * Fetch cell colors
-   ------------------------------------ */
+  /* ---------------- LOAD CELL COLORS ---------------- */
   useEffect(() => {
     async function loadCells() {
-      try {
-        const res = await fetch(`http://localhost:5000/api/cell`, {
-          credentials: "include",
-        });
+      const res = await fetch(`http://localhost:5000/api/cell/${matrixId}`, {
+        credentials: "include",
+      });
 
-        const json = await res.json();
-        if (json.success) {
-          const map: Record<number, string> = {};
-          json.data.forEach((c: any) => {
-            if (c.colorHex) map[c.index] = c.colorHex;
-          });
-          setCellColors(map);
-        }
-      } catch (err) {
-        console.error("Failed to load cells", err);
+      const json = await res.json();
+      if (json.success) {
+        const map: Record<number, string> = {};
+        json.data.forEach((c: any) => {
+          if (c.colorHex) map[c.index] = c.colorHex;
+        });
+        setCellColors(map);
       }
     }
-
     loadCells();
   }, [matrixId]);
 
+  /* ---------------- APPLY CATEGORY COLOR ---------------- */
+  function handleCellClick(index: number) {
+    if (!selectedCategory) return;
+
+    const color = selectedCategory.color;
+
+    setPending((prev) => ({
+      ...prev,
+      [index]: color,
+    }));
+  }
+
+  /* ---------------- SAVE CHANGES ---------------- */
+  async function saveChanges() {
+    const changes = Object.keys(pending).map((index) => ({
+      index: Number(index),
+      colorHex: pending[index],
+    }));
+
+    const res = await fetch(`http://localhost:5000/api/cell/${matrixId}`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ cells: changes }),
+    });
+
+    const json = await res.json();
+    if (json.success) {
+      setCellColors((prev) => ({ ...prev, ...pending }));
+      setPending({});
+    }
+  }
+
   if (!matrix) return <div className={styles.loading}>Loading matrix...</div>;
 
-  /** ------------------------------------
-   * Generate Dates
-   ------------------------------------ */
+  /* ---------------- DATE GENERATION ---------------- */
   const start = dayjs(matrix.startDate);
   const end = dayjs(matrix.endDate);
 
@@ -79,61 +101,69 @@ export default function MatrixGrid({ matrixId }: { matrixId: string }) {
     dates.push(d);
   }
 
-  /** ------------------------------------
-   * Generate Time Slots
-   ------------------------------------ */
+  /* ---------------- TIME SLOTS ---------------- */
   const startTime = dayjs(`2025-01-01T${matrix.startTime}`);
   const endTime = dayjs(`2025-01-01T${matrix.endTime}`);
 
   const times: string[] = [];
   let t = startTime;
 
-  while (t.isBefore(endTime) || t.isSame(endTime)) {
+  while (t.isBefore(endTime)) {
     const next = t.add(matrix.interval, "minute");
     times.push(`${t.format("h A")} - ${next.format("h A")}`);
     t = next;
   }
 
   return (
-    <div
-      className={styles.matrixGrid}
-      style={{ gridTemplateColumns: `120px repeat(${dates.length}, 1fr)` }}
-    >
-      {/* Empty corner */}
-      <div className={`${styles.cell} ${styles.header}`} />
+    <>
+      {/* SAVE BUTTON */}
+      {Object.keys(pending).length > 0 && (
+        <button className={styles.saveBtn} onClick={saveChanges}>
+          Save Changes
+        </button>
+      )}
 
-      {/* Date Row */}
-      {dates.map((d, i) => (
-        <div key={i} className={`${styles.cell} ${styles.header}`}>
-          {d.format("DD MMM")}
-        </div>
-      ))}
+      <div
+        className={styles.matrixGrid}
+        style={{ gridTemplateColumns: `120px repeat(${dates.length}, 1fr)` }}
+      >
+        {/* empty corner */}
+        <div className={`${styles.cell} ${styles.header}`} />
 
-      {/* Time Left Column + Cells */}
-      {times.map((timeLabel, rowIndex) => (
-        <>
-          {/* Time label */}
-          <div
-            key={`time-${rowIndex}`}
-            className={`${styles.cell} ${styles.timeHeader}`}
-          >
-            {timeLabel}
+        {/* dates */}
+        {dates.map((d, i) => (
+          <div key={i} className={`${styles.cell} ${styles.header}`}>
+            {d.format("DD MMM")}
           </div>
+        ))}
 
-          {dates.map((_, colIndex) => {
-            const index = rowIndex * dates.length + colIndex;
-            const bg = cellColors[index] || "transparent";
+        {/* time rows + cells */}
+        {times.map((label, r) => (
+          <>
+            <div
+              key={`time-${r}`}
+              className={`${styles.cell} ${styles.timeHeader}`}
+            >
+              {label}
+            </div>
 
-            return (
-              <div
-                key={`cell-${rowIndex}-${colIndex}`}
-                className={styles.cell}
-                style={{ backgroundColor: bg }}
-              />
-            );
-          })}
-        </>
-      ))}
-    </div>
+            {dates.map((_, c) => {
+              const index = r * dates.length + c;
+              const color =
+                pending[index] ?? cellColors[index] ?? "transparent";
+
+              return (
+                <div
+                  key={`cell-${r}-${c}`}
+                  className={styles.cell}
+                  style={{ backgroundColor: color }}
+                  onClick={() => handleCellClick(index)}
+                />
+              );
+            })}
+          </>
+        ))}
+      </div>
+    </>
   );
 }

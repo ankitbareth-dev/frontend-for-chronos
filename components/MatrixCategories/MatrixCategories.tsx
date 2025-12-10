@@ -6,14 +6,11 @@ import { FiTrash2, FiEdit2, FiPlus } from "react-icons/fi";
 
 interface MatrixCategoriesProps {
   matrixId: string;
-  selectedCategoryId?: string | null;
-  onSelectCategory?: (cat: any | null) => void;
+  selectedCategoryId: string | null;
+  onSelectCategory: (cat: any | null) => void;
 }
 
-/* -----------------------------------------
-   API FUNCTIONS (Matrix-Scoped)
--------------------------------------------*/
-
+/* ---------------- API ---------------- */
 async function fetchMatrixCategoriesAPI(matrixId: string) {
   const res = await fetch(`http://localhost:5000/api/categories/${matrixId}`, {
     credentials: "include",
@@ -51,9 +48,7 @@ async function editCategoryAPI(cat: any) {
   return res.json();
 }
 
-/* -----------------------------------------
-   COMPONENT
--------------------------------------------*/
+/* ---------------- COMPONENT ---------------- */
 
 export default function MatrixCategories({
   matrixId,
@@ -70,8 +65,7 @@ export default function MatrixCategories({
   const [name, setName] = useState("");
   const [color, setColor] = useState("#000000");
 
-  /* -------------------- Fetch Categories -------------------- */
-
+  /* ---------------- FETCH ---------------- */
   const loadCategories = async () => {
     setIsLoading(true);
     const res = await fetchMatrixCategoriesAPI(matrixId);
@@ -80,11 +74,10 @@ export default function MatrixCategories({
   };
 
   useEffect(() => {
-    if (matrixId) loadCategories();
+    loadCategories();
   }, [matrixId]);
 
-  /* -------------------- Modal Handlers -------------------- */
-
+  /* ---------------- MODAL HANDLERS ---------------- */
   const openAddModal = () => {
     setEditMode(false);
     setName("");
@@ -117,18 +110,15 @@ export default function MatrixCategories({
 
   const handleDelete = async (id: string) => {
     await deleteCategoryAPI(id);
-    loadCategories();
+    await loadCategories();
 
-    if (selectedCategoryId === id && onSelectCategory) {
+    if (selectedCategoryId === id) {
       onSelectCategory(null);
     }
   };
 
-  /* -------------------- Handle Select Category -------------------- */
   const selectCategory = (cat: any) => {
-    if (onSelectCategory) {
-      onSelectCategory(cat);
-    }
+    onSelectCategory(cat);
   };
 
   return (
@@ -140,36 +130,33 @@ export default function MatrixCategories({
         </button>
       </div>
 
-      {/* Loading */}
-      {isLoading && <div className={styles.empty}>Loading categories...</div>}
-
-      {/* No Categories */}
+      {isLoading && <div className={styles.empty}>Loading...</div>}
       {!isLoading && categories.length === 0 && (
         <div className={styles.empty}>No categories yet</div>
       )}
 
-      {/* Category List */}
       <div className={styles.list}>
         {categories.map((cat) => {
-          const isSelected = cat.id === selectedCategoryId;
+          const isActive = cat.id === selectedCategoryId;
 
           return (
             <div
               key={cat.id}
-              className={`${styles.category} ${
-                isSelected ? styles.active : ""
-              }`}
+              className={`${styles.category} ${isActive ? styles.active : ""}`}
+              onClick={() => selectCategory(cat)}
             >
-              <div className={styles.left} onClick={() => selectCategory(cat)}>
+              <div className={styles.left}>
                 <div
                   className={styles.colorDot}
                   style={{ backgroundColor: cat.color }}
                 />
-
                 <span className={styles.name}>{cat.name}</span>
               </div>
 
-              <div className={styles.actions}>
+              <div
+                className={styles.actions}
+                onClick={(e) => e.stopPropagation()}
+              >
                 <FiEdit2
                   className={styles.icon}
                   onClick={() => openEditModal(cat)}
@@ -184,9 +171,6 @@ export default function MatrixCategories({
         })}
       </div>
 
-      {/* -----------------------------------------
-          Add/Edit Modal
-      ------------------------------------------- */}
       {showModal && (
         <div className={styles.modalBackdrop}>
           <div className={styles.modal}>
@@ -199,7 +183,7 @@ export default function MatrixCategories({
               onChange={(e) => setName(e.target.value)}
             />
 
-            <label>Color (Hex Code)</label>
+            <label>Color</label>
             <input
               className={styles.input}
               type="color"

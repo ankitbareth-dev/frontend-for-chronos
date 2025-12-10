@@ -11,10 +11,7 @@ export default function MatrixDetailPage() {
   const queryClient = useQueryClient();
   const matrix: any = queryClient.getQueryData(["selected-matrix"]);
 
-  // -------------------------------------------
-  // 🔼 LIFTED STATE: selected category
-  // -------------------------------------------
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState<any>(null);
 
   if (!matrix) {
     return (
@@ -31,20 +28,21 @@ export default function MatrixDetailPage() {
         <h1 className={styles.headerTitle}>{matrix.name}</h1>
       </div>
 
-      {/* GRID + CATEGORIES */}
       <div className={styles.mainLayout}>
+        {/* GRID */}
         <div className={styles.gridWrapper}>
           <MatrixGrid
             matrixId={matrix.id}
-            selectedCategory={selectedCategory} // 👈 pass state
+            selectedCategory={selectedCategory}
           />
         </div>
 
+        {/* CATEGORIES */}
         <div className={styles.categoryWrapper}>
           <MatrixCategories
             matrixId={matrix.id}
-            selectedCategory={selectedCategory} // 👈 current selected
-            onSelectCategory={setSelectedCategory} // 👈 pass setter
+            selectedCategoryId={selectedCategory?.id || null}
+            onSelectCategory={setSelectedCategory}
           />
         </div>
       </div>
