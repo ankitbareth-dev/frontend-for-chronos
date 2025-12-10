@@ -28,12 +28,12 @@ async function createCategoryAPI(matrixId: string, newCat: any) {
   return res.json();
 }
 
-async function deleteCategoryAPI(id: string) {
+async function deleteCategoryAPI(data: any) {
   const res = await fetch("http://localhost:5000/api/categories/delete", {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
-    body: JSON.stringify({ id }),
+    body: JSON.stringify(data),
   });
   return res.json();
 }
@@ -96,7 +96,8 @@ export default function MatrixCategories({
   const handleSubmit = async () => {
     if (editMode) {
       await editCategoryAPI({
-        id: current.id,
+        matrixId: matrixId,
+        categoryId: current.id,
         name,
         color,
       });
@@ -109,7 +110,7 @@ export default function MatrixCategories({
   };
 
   const handleDelete = async (id: string) => {
-    await deleteCategoryAPI(id);
+    await deleteCategoryAPI({ matrixId: matrixId, categoryId: id });
     await loadCategories();
 
     if (selectedCategoryId === id) {
