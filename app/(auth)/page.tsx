@@ -1,116 +1,89 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./Auth.module.sass";
 
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-
-import { useAuthActions } from "@/hooks/useAuthActions";
+declare global {
+  interface Window {
+    google: any;
+  }
+}
 
 export default function AuthPage() {
   const router = useRouter();
+  const googleBtnRef = useRef<HTMLDivElement>(null);
 
-  const [mode, setMode] = useState<"login" | "signup">("login");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const { loginMutation, signupMutation } = useAuthActions();
-
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  // ✅ MUST be Web Application OAuth Client ID
+  const GOOGLE_CLIENT_ID =
+    "558595622068-oibtpvf2mtvu0o34hdl8fkgls8hkd7jd.apps.googleusercontent.com";
 
   useEffect(() => {
-    if (isAuthenticated) router.push("/dashboard");
-  }, [isAuthenticated]);
+    // Prevent loading script multiple times
+    if (document.getElementById("google-sdk")) return;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    const script = document.createElement("script");
+    script.id = "google-sdk";
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
 
-    if (mode === "login") {
-      loginMutation.mutate({ email, password });
-    } else {
-      signupMutation.mutate(
-        { name, email, password },
-        {
-          onSuccess: () => setMode("login"),
-        }
-      );
-    }
-  };
+    script.onload = () => {
+      if (!window.google || !googleBtnRef.current) {
+        console.error("Google SDK not available");
+        return;
+      }
 
-  const loading = loginMutation.isPending || signupMutation.isPending;
+      // ✅ Initialize Google Identity Services
+      window.google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: async (response: any) => {
+          try {
+            const res = await fetch("http://localhost:5000/api/auth/google", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
+              body: JSON.stringify({
+                idToken: response.credential,
+              }),
+            });
 
-  const error = loginMutation.error?.message || signupMutation.error?.message;
+            const data = await res.json();
+            if (!res.ok) {
+              throw new Error(data.message || "Google login failed");
+            }
+
+            router.push("/dashboard");
+          } catch (err: any) {
+            alert(err.message);
+          }
+        },
+      });
+
+      // ✅ Render OFFICIAL Google button
+      window.google.accounts.id.renderButton(googleBtnRef.current, {
+        theme: "outline",
+        size: "large",
+        shape: "pill",
+        width: 320,
+      });
+    };
+
+    document.body.appendChild(script);
+  }, [router]);
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.card}>
-        <h2>{mode === "login" ? "Login" : "Sign Up"}</h2>
-
-        <form onSubmit={handleSubmit} className={styles.form}>
-          {mode === "signup" && (
-            <div className={styles.inputGroup}>
-              <label>Name</label>
-              <input
-                type="text"
-                placeholder="Enter your name"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-          )}
-
-          <div className={styles.inputGroup}>
-            <label>Email</label>
-            <input
-              type="email"
-              placeholder="Enter your email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label>Password</label>
-            <input
-              type="password"
-              placeholder="Enter your password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-
-          <button className={styles.actionBtn} disabled={loading}>
-            {loading
-              ? mode === "login"
-                ? "Logging in..."
-                : "Signing up..."
-              : mode === "login"
-              ? "Login"
-              : "Sign Up"}
-          </button>
-
-          {error && <p style={{ color: "red", marginTop: "8px" }}>{error}</p>}
-        </form>
-
-        <p className={styles.switchText}>
-          {mode === "login" ? (
-            <>
-              Don’t have an account?{" "}
-              <span onClick={() => setMode("signup")}>Sign Up</span>
-            </>
-          ) : (
-            <>
-              Already have an account?{" "}
-              <span onClick={() => setMode("login")}>Login</span>
-            </>
-          )}
+        <h1 className={styles.title}>Welcome to Chronos</h1>
+        <p className={styles.subtitle}>
+          Sign in securely with your Google account
         </p>
+
+        {/* ✅ Google renders button here */}
+        <div ref={googleBtnRef} />
       </div>
     </div>
   );
