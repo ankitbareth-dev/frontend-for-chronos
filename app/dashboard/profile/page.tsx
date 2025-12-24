@@ -1,125 +1,98 @@
 "use client";
 
 import { useState } from "react";
-import { FiCamera, FiUser, FiShield } from "react-icons/fi";
 import styles from "./Profile.module.sass";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import { useProfileActions } from "@/hooks/useProfileActions";
+import { FiCamera } from "react-icons/fi";
 
-const Profile = () => {
-  const user = useSelector((state: RootState) => state.auth.user);
-  const { updateProfileMutation } = useProfileActions();
 
-  const [name, setName] = useState(user?.name || "");
-  const [email, setEmail] = useState(user?.email || "");
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+const USER = {
+  name: "John Doe",
+  email: "john.doe@example.com",
+  avatarUrl: null as string | null,
+};
 
-  if (!user) return <div>Loading...</div>;
+export default function Profile() {
+  const [name, setName] = useState(USER.name);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(USER.avatarUrl);
+  const [loading, setLoading] = useState(false);
 
-  // ---------------- PROFILE INFO ----------------
-  const handleProfileSave = () => {
-    const payload: { name?: string; email?: string } = {};
-    if (name !== user.name) payload.name = name;
-    if (email !== user.email) payload.email = email;
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-    if (Object.keys(payload).length === 0) return; // nothing to update
-
-    updateProfileMutation.mutate(payload);
+    setAvatarFile(file);
+    setPreview(URL.createObjectURL(file));
   };
 
-  // ---------------- PASSWORD ----------------
-  const handlePasswordUpdate = () => {
-    if (!oldPassword || !newPassword) return; // require both
-    const payload = { oldPassword, newPassword };
-    updateProfileMutation.mutate(payload);
+  const handleSave = async () => {
+    setLoading(true);
+
+    try {
+      /* TEMP PLACEHOLDER */
+      console.log("Saving profile:", {
+        name,
+        avatar: avatarFile,
+      });
+
+      // simulate API delay
+      await new Promise((res) => setTimeout(res, 800));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className={styles.page}>
       <div className={styles.wrapper}>
-        {/* TOP PROFILE CARD */}
-        <section className={styles.profileTop}>
-          <div className={styles.avatarLarge}>{user.name.charAt(0)}</div>
-          <div className={styles.topInfo}>
-            <h2>{user.name}</h2>
-            <p>{user.email}</p>
-            <button className={styles.secondaryBtn}>
+        <section className={styles.profileCard}>
+          {/* Avatar */}
+          <div className={styles.avatarWrapper}>
+            <div className={styles.avatar}>
+              {preview ? (
+                <img src={preview} alt="Avatar" />
+              ) : (
+                <span>{USER.name.charAt(0).toUpperCase()}</span>
+              )}
+            </div>
+
+            <label className={styles.avatarBtn}>
               <FiCamera size={16} />
-              Change Photo
-            </button>
+              Change photo
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={handleAvatarChange}
+              />
+            </label>
+          </div>
+
+          {/* Info + Form */}
+          <div className={styles.info}>
+            <h2>{USER.name}</h2>
+            <p className={styles.email}>{USER.email}</p>
+
+            <div className={styles.form}>
+              <div className={styles.field}>
+                <label>Name</label>
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+
+              <button
+                className={styles.saveBtn}
+                disabled={loading || name === USER.name}
+                onClick={handleSave}
+              >
+                {loading ? "Saving..." : "Save changes"}
+              </button>
+            </div>
           </div>
         </section>
-
-        {/* BOTTOM GRID */}
-        <div className={styles.bottomGrid}>
-          {/* PROFILE INFO */}
-          <section className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <FiUser className={styles.icon} />
-              <h2>Profile Information</h2>
-            </div>
-
-            <div className={styles.field}>
-              <label>Name</label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-
-            <div className={styles.field}>
-              <label>Email</label>
-              <input
-                type="text"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-
-            <button className={styles.primaryBtn} onClick={handleProfileSave}>
-              Save Profile
-            </button>
-          </section>
-
-          {/* SECURITY */}
-          <section className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <FiShield className={styles.icon} />
-              <h2>Security</h2>
-            </div>
-
-            <div className={styles.field}>
-              <label>Old Password</label>
-              <input
-                type="password"
-                value={oldPassword}
-                onChange={(e) => setOldPassword(e.target.value)}
-              />
-            </div>
-
-            <div className={styles.field}>
-              <label>New Password</label>
-              <input
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
-            </div>
-
-            <button
-              className={styles.primaryBtn}
-              onClick={handlePasswordUpdate}
-            >
-              Update Password
-            </button>
-          </section>
-        </div>
       </div>
     </div>
   );
-};
-
-export default Profile;
+}
